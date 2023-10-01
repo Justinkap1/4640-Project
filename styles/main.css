@@ -1,3 +1,61 @@
-header h1{
-    color: blue;
+body{
+    background-image: url('../assets/background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.header-top{
+    margin-top: 2rem;
+    color: green;
+    text-align: center;
+}
+.main-nav{
+    margin-top: 5rem;
+    color: white;
+    text-align: center;
+}
+/*
+First nav section for Play Alone and Online Game
+*/
+.main-nav .firstSection{
+    margin-top: 6rem;
+    margin-left: 22rem;
+    display: flex;
+    justify-content: space-between;
+    max-width:51.5%;
+}
+/*
+Second nav section for Hand Histories and Articles
+*/
+.main-nav .secondSection{
+    margin-top: 2rem;
+    margin-left: 17.2rem;
+    display: flex;
+    justify-content: space-between;
+    max-width: 61.5%;
+}
+.main-nav ul li{
+    list-style: none;
+    position: relative;
+}
+/* Navigation chips image styling */
+.main-nav ul li img{
+    display: block;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    box-shadow: 5px 5px 3px black;
+}
+.main-nav ul li img:hover{
+    scale: 1.2;
+}
+.main-nav ul li .text-container{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    font-size: 1em;
+    font-family: 'Cursive', sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
