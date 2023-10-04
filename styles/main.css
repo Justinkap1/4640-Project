@@ -1,23 +1,59 @@
 body{
+    font-family: 'Times New Roman', Times, serif;
     background-image: url('../assets/background.jpg');
     background-repeat: no-repeat;
     background-size: cover;
 }
-.header-top{
-    margin-top: 2rem;
-    color: green;
-    text-align: center;
+#main-header{
+    position: relative;
+    display: flex;
+    width: 75%;
+    margin-left: 11.5rem;
+    padding-bottom: 2rem;
+    background-image: url('../assets/header-background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    justify-content: space-between;
+    padding: .75rem;
+    border-radius: 1rem;
+    vertical-align: middle;
 }
+#main-header .poker-header img{
+    display: block;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    border-color: green;
+    border-style: solid;
+    border-width: 5px;
+}
+#main-header .pfp img{
+    display: block;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    border-color: green;
+    border-style: solid;
+    border-width: 5px;
+}
+#main-header h1{
+    margin-top: .85rem;
+    display: flex;
+    color: white;
+    text-shadow: 2px 2px black;
+    text-align: center;
+    font-size: 2.2rem;
+}
+/*
+First nav section for Play Alone and Online Game
+*/
 .main-nav{
     margin-top: 5rem;
     color: white;
     text-align: center;
 }
-/*
-First nav section for Play Alone and Online Game
-*/
 .main-nav .firstSection{
-    margin-top: 6rem;
+    margin-top: 12rem;
     margin-left: 22rem;
     display: flex;
     justify-content: space-between;
@@ -46,7 +82,8 @@ Second nav section for Hand Histories and Articles
     box-shadow: 5px 5px 3px black;
 }
 .main-nav ul li img:hover{
-    scale: 1.2;
+    transform: scale(1.2);
+    transition: transform 0.3s ease-in-out;
 }
 .main-nav ul li .text-container{
     position: absolute;
@@ -54,8 +91,44 @@ Second nav section for Hand Histories and Articles
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
-    font-weight: bold;
-    font-size: 1em;
-    font-family: 'Cursive', sans-serif;
+    font-weight: bolder;
+    font-size: 1.2em;
+    font-family: 'Cursive', sans-serif; 
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+/* footer styling */
+#main-foot{
+    display: flex;
+    border-top: 3px solid  black;
+    border-radius: 5px;
+    background-color: lightgray;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 6.5rem; 
+}
+#main-foot small{
+    position: absolute;
+    bottom: 0;
+}
+#main-foot .links{
+    margin-top: 10px;
+    display: flex;
+    list-style: none;
+    gap: 40px;
+}
+#main-foot .links li img{
+    display: block;
+    border-radius: 50%;
+    border-color: red;
+    border-style: solid;
+    border-width: 3px;
+    width: 60px;
+    height: 60px;
+}
+#main-foot #searchBar{
+    position: absolute;
+    margin-top: 2rem;
+    margin-right: 3rem;
+    right: 0;
 }
