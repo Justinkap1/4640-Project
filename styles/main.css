@@ -1,3 +1,4 @@
+
 body{
     font-family: 'Times New Roman', Times, serif;
     background-image: url('../assets/background.jpg');
@@ -243,7 +244,7 @@ div > hard > img {
     height: 70vh;
 }
 
-.pfp img{
+.pfp-footer img{
     border-radius: 50%;
     border-color: red;
     border-style: solid;
@@ -256,6 +257,5 @@ div > hard > img {
     position: absolute;
     margin-right: 10px; 
 }
-
 
 
