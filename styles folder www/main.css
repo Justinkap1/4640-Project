@@ -1,15 +1,10 @@
 
-body {
+body{
     font-family: 'Times New Roman', Times, serif;
     background-image: url('../assets/background.jpg');
     background-repeat: no-repeat;
     background-size: cover;
-    width: 100vw; 
-    height: 100vh; 
-    margin: 0;
-    overflow: hidden; 
 }
-
 #main-header{
     position: relative;
     display: flex;
@@ -42,11 +37,7 @@ body {
     border-style: solid;
     border-width: 5px;
 }
-#main-header h1 {
-    position: absolute; 
-    top: 0; 
-    left: 50%; 
-    transform: translateX(-50%); 
+#main-header h1{
     margin-top: .85rem;
     display: flex;
     color: white;
@@ -54,7 +45,6 @@ body {
     text-align: center;
     font-size: 2.2rem;
 }
-
 /*
 First nav section for Play Alone and Online Game
 */
@@ -108,46 +98,41 @@ Second nav section for Hand Histories and Articles
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 /* footer styling */
-#main-foot {
+#main-foot{
     display: flex;
-    border-top: 3px solid black;
+    border-top: 3px solid  black;
     border-radius: 5px;
     background-color: lightgray;
-    position: fixed;
+    position: absolute;
     bottom: 0;
     width: 100%;
-    height: 6.5rem;
+    height: 6.5rem; 
 }
-
-#main-foot small {
+#main-foot small{
     position: absolute;
     bottom: 0;
 }
-
-#main-foot .links {
+#main-foot .links{
     margin-top: 10px;
     display: flex;
     list-style: none;
     gap: 40px;
 }
-
-#main-foot .links li img {
+#main-foot .links li img{
     display: block;
     border-radius: 50%;
-    border-color: green;
+    border-color: red;
     border-style: solid;
     border-width: 3px;
     width: 60px;
     height: 60px;
 }
-
-#main-foot #searchBar {
+#main-foot #searchBar{
     position: absolute;
     margin-top: 2rem;
     margin-right: 3rem;
     right: 0;
 }
-
 
 div > easy, div > medium, div > hard {
     display: inline-block;
@@ -179,12 +164,6 @@ div > hard > img {
     border-radius: 50%; 
 }
 
-.poker-chip:hover {
-    transform: scale(1.1);
-}
-
-
-
 .friends-list {
     background-color: #f0f0f0;
     padding: 10px;
@@ -203,7 +182,7 @@ div > hard > img {
     margin-left: 10px;
 }
 .add-friend {
-    background-color: green;
+    background-color: #007bff;
     color: white;
     border-radius: 50%;
     width: 24px;
