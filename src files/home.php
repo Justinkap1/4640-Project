@@ -8,14 +8,14 @@
     <link rel="stylesheet" href="../styles/main.css"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"  crossorigin="anonymous"> 
     
-    <title>Bootstrap Starter HTML</title>  
+    <title>Home</title>  
 </head>
 
 <body>
     <header>
         <div class="header-top" id="main-header">
             <div class="poker-header"><img src="../assets/poker-logo.jpg" alt="poker logo"></div>
-            <h1>Welcome to UVA Poker, <?=$name?>! (<?=$email?>) Select an option to get started</h1>
+            <h1>Welcome to UVA Poker, <?=$name?>! Select an option to get started</h1>
             <div class="pfp"><img src="/assets/pfp.jpg" alt="profile pic"></div>
         </div>
         <nav class="main-nav">

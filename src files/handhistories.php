@@ -8,47 +8,28 @@
     <link rel="stylesheet" href="../styles/main.css"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"  crossorigin="anonymous"> 
     
-    <title>Bootstrap Starter HTML</title>  
+    <title>Hand Histories</title>  
 </head>
 
 <body>
     <header>
         <div class="header-top" id="main-header">
             <div class="poker-header"><img src="../assets/poker-logo.jpg" alt="poker logo"></div>
-            <h1>Welcome to UVA HANDHISTORIES, <?=$name?>! (<?=$email?>) Select an option to get started</h1>
+            <h1>Hand Histories for <?=$name?></h1>
             <div class="pfp"><img src="/assets/pfp.jpg" alt="profile pic"></div>
         </div>
-        <nav class="main-nav">
-            <ul class="firstSection">
-                <li>
-                    <a href="?command=alone">
-                        <img src="/assets/pokerchip.jpg" alt="chip">
-                        <div class="text-container">Play Alone</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="?command=online">
-                        <img src="/assets/pokerchip.jpg" alt="chip">
-                        <div class="text-container">Play Online</div>
-                    </a>
-                </li>
-            </ul>
-            <ul class="secondSection">
-                <li>
-                    <a href="?command=handhistories">
-                        <img src="/assets/pokerchip.jpg" alt="chip">
-                        <div class="text-container">Hand Histories</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="?command=articles">
-                        <img src="../assets/pokerchip.jpg" alt="chip">
-                        <div class="text-container">Articles</div>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <div class="choose-quote">Choose to view or select</div>
     </header>
+    <section class="choose-section">
+        <a href="?command=addhand">
+            <img src="/assets/pokerchip.jpg" alt="chip">
+            <div class="add-a-hand">Add a Hand</div>
+        </a>
+        <a href="?command=selecthand">
+            <img src="/assets/pokerchip.jpg" alt="chip">
+            <div class="select-a-hand">Select a Hand</div>
+        </a>
+    </section>
     <footer class="main-footer" id="main-foot">
         <ul class="links">
             <li><img src="/assets/twitter.png" alt="twitter"></li>
