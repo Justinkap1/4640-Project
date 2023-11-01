@@ -56,6 +56,30 @@ class pokerController {
         "2c" => "<img src='../projectAssets/2_of_clubs.png' alt='2 of Clubs' width='55' height='70'>"
     );
 
+    private $positionDict = array(
+        "utg" => 0,
+        "utg1" => 1,
+        "utg2" => 2,
+        "mp" => 3,
+        "mp1" => 4,
+        "co" => 5,
+        "d" => 6,
+        "sb" => 7,
+        "bb" => 8 
+    );
+
+    private $postFlopPositionDict = array(
+        "sb" => 0,
+        "bb" => 1,
+        "utg" => 2,
+        "utg1" => 3,
+        "utg2" => 4,
+        "mp" => 5,
+        "mp1" => 6,
+        "co" => 7,
+        "d" => 8
+    );
+
     private $input = [];
 
     private $db;
@@ -68,8 +92,6 @@ class pokerController {
     public function __construct($input) {
         session_start();
         //$this->db = new Database();
-       // $_SESSION['flopMessage'] = '';
-       // $_SESSION['preflopMessage'] = '';
         
         $this->input = $input;
     }
@@ -79,6 +101,9 @@ class pokerController {
         $command = "welcome";
         if (isset($this->input["command"]))
             $command = $this->input["command"];
+
+        // if (isset($_GET["command"]))
+        //     $command = $_GET["command"];
 
         switch($command) {
             case "login":
@@ -107,11 +132,20 @@ class pokerController {
             case "addflop":
                 $this->addFlop();
                 break;
+            case "preflop":
+                $this->preFlop();
+                break;
             case "selecthand":
                 $this->showSelectHand();
                 break;
             case "logout":
                 $this->logout();
+            case "addturn":
+                $this->addTurn();
+                break;
+            case "addriver":
+                $this->addRiver();
+                break;
             default:
                 $this->showWelcome();
                 break;
@@ -162,6 +196,8 @@ class pokerController {
     public function showAddHand(){
         $preflopMessage = $_SESSION['preflopMessage'];
         $flopMessage = $_SESSION['flopMessage'];
+        $preflopActionMessage = $_SESSION['preflopActionMessage'];
+
         $name = $_SESSION["name"];
         $email = $_SESSION["email"];
         include("/opt/src/Project/addHand.php");
@@ -178,10 +214,17 @@ class pokerController {
             $_SESSION['preflopMessage'] = "Please fill out all forms!";
             $this->showAddHand($_SESSION['preflopMessage']);
         }
+        if ($_POST['vPosition'] == $_POST['hPosition']){
+            $_SESSION['preflopMessage'] = "Give each person a different position!";
+            $this->showAddHand($_SESSION['preflopMessage']);
+        }
         else{
             $_SESSION['hero_stack'] = $_POST['heroStack'];
             $_SESSION['villain_stack'] = $_POST['villainStack'];
             $_SESSION['blinds'] = $_POST['blinds'];
+
+            $split_blinds = explode("/", $_SESSION['blinds']);
+            $_SESSION['big_blind'] = $split_blinds[1];
     
             //split hero's hand into the two by the comma
             $_SESSION['heroHand'] = $_POST['heroHand'];
@@ -200,15 +243,8 @@ class pokerController {
     
             //villain hand position
             $_SESSION['vPosition'] = $_POST['vPosition'];
-    
-            //create message out of all information
-            $_SESSION['preflopMessage'] = "
-            <div class='stacks'>
-                <span>Hero Stack: $_SESSION[hero_stack]</span> <br> 
-                <span>Villain Stack: $_SESSION[villain_stack]</span> <br> 
-                <span>Blinds: $_SESSION[blinds]</span>
-            </div>
-            <br>
+
+            $displayOrder = "
             <div class='table'>
                 <div class='$_SESSION[hPosition]'>
                     Hero Hand: <br>
@@ -227,6 +263,20 @@ class pokerController {
                 </div>
             </div>
             ";
+
+            $_SESSION['hero_stack_bb'] = $_SESSION['hero_stack']/$_SESSION['big_blind'];
+            $_SESSION['villain_stack_bb'] = $_SESSION['villain_stack']/$_SESSION['big_blind'];
+    
+            //create message out of all information
+            $_SESSION['preflopMessage'] = "
+            <div class='stacks'>
+                <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                <span>Blinds: $_SESSION[blinds]</span>
+            </div>
+            <br>
+            $displayOrder
+            ";
             $this->showAddHand();
         }
     }
@@ -234,6 +284,8 @@ class pokerController {
     public function addFlop(){
         $_SESSION['flopFirstAction'] = $_POST['flopAction'];
         $_SESSION['flopSecondAction'] = $_POST['flopAction2'];
+        $_SESSION['flopThirdAction'] = $_POST['flopAction3'];
+        $_SESSION['flopFourthAction'] = $_POST['flopAction4'];
 
         $_SESSION['flopMessage'] = "
         $_SESSION[flopFirstAction]
@@ -241,6 +293,32 @@ class pokerController {
         $_SESSION[flopSecondAction]
         ";
         $this->showAddHand();
+    }
+
+    public function preFlop(){
+        $_SESSION['preflopFirstAction'] = $_POST['preflopAction'];
+        $_SESSION['preflopSecondAction'] = $_POST['preflopAction2'];
+        $_SESSION['preflopThirdAction'] = $_POST['preflopAction3'];
+        $_SESSION['preflopFourthAction'] = $_POST['preflopAction4'];
+
+        $_SESSION['preflopActionMessage'] = "
+        <div class='preflopAction'>
+            $_SESSION[preflopFirstAction]
+            <br>
+            $_SESSION[preflopSecondAction]
+            <br>
+            $_SESSION[preflopThirdAction]
+            <br>
+            $_SESSION[preflopFourthAction]
+        </div>
+        ";
+        $this->showAddHand();
+    }
+    public function addTurn(){
+
+    }
+    public function addRiver(){
+
     }
 
     public function logout(){
