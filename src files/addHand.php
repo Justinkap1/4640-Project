@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="Justin Kaplan and Mihir Sangameswar" content="Project">
     <meta name="Bootstrap + Less" content="Homework 3"> 
+    <link rel="stylesheet" href="../styles/main.css"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"  crossorigin="anonymous"> 
     
     <title>Add a Hand</title>  
@@ -142,27 +143,76 @@
                 <input type="submit" value="Update">
             </form>
             </section>
+            <!-- PRE FLOP ACTION -->
+            <section class="flop">
+                <h1>Pre Flop</h1>
+                <form action="?command=preflop" method="post">
+                <label for="preflopAction">First Action</label>
+                <select name="preflopAction" id="preflopAction">
+                    <option value="check">Check</option>
+                    <option value="bet">Bet</option>
+                    <option value="raise">Raise</option>
+                    <option value="fold">Fold</option>
+                </select>
+                <label for="preflopAction2">Second Action</label>
+                <select name="preflopAction2" id="preflopAction2">
+                    <option value="check2">Check</option>
+                    <option value="bet2">Bet</option>
+                    <option value="raise2">Raise</option>
+                    <option value="fold2">Fold</option>
+                </select>
+                <label for="preflopAction3">Third Action</label>
+                <select name="preflopAction3" id="preflopAction3">
+                    <option value="check3">Check</option>
+                    <option value="bet3">Bet</option>
+                    <option value="raise3">Raise</option>
+                    <option value="fold3">Fold</option>
+                </select>
+                <label for="preflopAction4">Fourth Action</label>
+                <select name="preflopAction4" id="preflopAction4">
+                    <option value="check4">Check</option>
+                    <option value="bet4">Bet</option>
+                    <option value="raise4">Raise</option>
+                    <option value="fold4">Fold</option>
+                </select>
+                <input type="submit" value="Update">
+                </form>
+            </section>
             <!-- FLOP ACTION -->
             <section class="flop">
-            <h1>Flop</h1>
-            <form action="?command=addflop" method="post">
-            <label for="flopAction">First Action</label>
-            <select name="flopAction" id="flopAction">
-                <option value="check">Check</option>
-                <option value="bet">Bet</option>
-                <option value="raise">Raise</option>
-                <option value="fold">Fold</option>
-            </select>
-            <label for="flopAction2">Second Action</label>
-            <select name="flopAction2" id="flopAction2">
-                <option value="check2">Check</option>
-                <option value="bet2">Bet</option>
-                <option value="raise2">Raise</option>
-                <option value="fold2">Fold</option>
-            </select>
-            <input type="submit" value="Update">
-            </form>
-        </section>
+                <h1>Flop</h1>
+                <form action="?command=addflop" method="post">
+                <label for="flopAction">First Action</label>
+                <select name="flopAction" id="flopAction">
+                    <option value="check">Check</option>
+                    <option value="bet">Bet</option>
+                    <option value="raise">Raise</option>
+                    <option value="fold">Fold</option>
+                </select>
+                <label for="flopAction2">Second Action</label>
+                <select name="flopAction2" id="flopAction2">
+                    <option value="check2">Check</option>
+                    <option value="bet2">Bet</option>
+                    <option value="raise2">Raise</option>
+                    <option value="fold2">Fold</option>
+                </select>
+                <label for="flopAction3">Third Action</label>
+                <select name="flopAction3" id="flopAction3">
+                    <option value="check3">Check</option>
+                    <option value="bet3">Bet</option>
+                    <option value="raise3">Raise</option>
+                    <option value="fold3">Fold</option>
+                </select>
+                <label for="flopAction4">Fourth Action</label>
+                <select name="flopAction4" id="flopAction4">
+                    <option value="check4">Check</option>
+                    <option value="bet4">Bet</option>
+                    <option value="raise4">Raise</option>
+                    <option value="fold4">Fold</option>
+                </select>
+                <input type="submit" value="Update">
+                </form>
+            </section>
     </div>
     <br>
     <section>

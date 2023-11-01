@@ -80,6 +80,9 @@ class pokerController {
         if (isset($this->input["command"]))
             $command = $this->input["command"];
 
+        // if (isset($_GET["command"]))
+        //     $command = $_GET["command"];
+
         switch($command) {
             case "login":
                 $this->login();
@@ -106,6 +109,9 @@ class pokerController {
                 break;
             case "addflop":
                 $this->addFlop();
+                break;
+            case "preflop":
+                $this->preFlop();
                 break;
             case "selecthand":
                 $this->showSelectHand();
@@ -234,11 +240,27 @@ class pokerController {
     public function addFlop(){
         $_SESSION['flopFirstAction'] = $_POST['flopAction'];
         $_SESSION['flopSecondAction'] = $_POST['flopAction2'];
+        $_SESSION['flopThirdAction'] = $_POST['flopAction3'];
+        $_SESSION['flopFourthAction'] = $_POST['flopAction4'];
 
         $_SESSION['flopMessage'] = "
         $_SESSION[flopFirstAction]
         <br>
         $_SESSION[flopSecondAction]
+        ";
+        $this->showAddHand();
+    }
+
+    public function preFlop(){
+        $_SESSION['preflopFirstAction'] = $_POST['preflopAction'];
+        $_SESSION['preflopSecondAction'] = $_POST['preflopAction2'];
+        $_SESSION['preflopThirdAction'] = $_POST['preflopAction3'];
+        $_SESSION['preflopFourthAction'] = $_POST['preflopAction4'];
+
+        $_SESSION['preflopMessage'] = "
+        $_SESSION[preflopFirstAction]
+        <br>
+        $_SESSION[preflopSecondAction]
         ";
         $this->showAddHand();
     }
