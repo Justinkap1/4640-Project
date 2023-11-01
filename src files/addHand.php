@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="Justin Kaplan and Mihir Sangameswar" content="Project">
     <meta name="Bootstrap + Less" content="Homework 3"> 
-    <link rel="stylesheet" href="../styles/main.css"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"  crossorigin="anonymous"> 
     
     <title>Add a Hand</title>  
@@ -25,19 +24,26 @@
         right: 10px;
     }
     .container{
-        margin-left: 0px;
         display: flex;
+        justify-content: center;
         gap: 1.5rem;
     }
 
-    .preflop, .flop{
-        max-width: 200px;
+    .gameStart-info, .preflop, .flop, .turn, .river{
+        position: relative;
+        max-width: 20%;
+        height: 650px;
         margin: 0;
         padding: 10px;
         border: 1px solid #ddd;
         border-radius: 5px;
     }
-
+    .flop select, .preflop select, input[type="text"]{
+        max-width: 60px;
+    }
+    select{
+        max-width: 60px;
+    }
     form {
         display: flex;
         flex-direction: column;
@@ -46,8 +52,10 @@
     label, input, select {
         margin-bottom: 5px;
     }
-
     input[type="submit"] {
+        position: absolute;
+        bottom: 0;
+        width: 90%;
         background-color: #4CAF50;
         color: white;
         padding: 8px;
@@ -59,12 +67,15 @@
     input[type="submit"]:hover {
         background-color: #45a049;
     }
-
+    .same-line{
+        display: flex;
+        gap: 5px;
+    }
     .preflop-info {
         margin-top: 20px;
     }
     .utg{
-        width: 10%;
+        width: 30%;
         margin: auto;
     }
     .utg1{
@@ -86,6 +97,41 @@
         width: 10%;
         margin: auto;
     }
+    .game-info .stacks{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 2rem;
+    }
+    .game-info .stacks span{
+        border: 1px solid black;
+        border-radius: 5%;
+        padding: 10px;
+        background-color: lightgray;
+
+    }
+    .table{
+        display: flex;
+        justify-content: center;
+    }
+    .table-image{
+        border: 1px solid black;
+        display: flex;
+        justify-content: space-between;
+        width: 60%;
+        height: 500px;
+        margin: auto;
+        background-image: url('../projectAssets/table-display.jpg');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+    }
+    .preflopAction{
+        font-weight: bold; 
+    }
+    .table-text-container{
+        display: flex;
+    }
 </style>
 <body>
     <h1 class="add-hand">Add a Hand</h1>
@@ -93,8 +139,8 @@
         <a href="?command=logout">Log out</a>
     </button>
     <div class="container">
-        <section class="preflop">
-            <h1>Preflop</h1>
+        <section class="gameStart-info">
+            <h1>Game Info</h1>
             <form action="?command=addpreflop" method="post">
                 <label for="blinds">Blinds</label>
                 <select name="blinds" id="blinds">
@@ -127,54 +173,69 @@
                     <option value="sb">SB</option>
                     <option value="bb">BB</option>
                 </select>
-                <br>
                 <label for="stack-size-hero">Hero Starting Stack</label>
                 <input type="text" name="heroStack" pattern="[0-9]+" title="Enter hero stack size">
-                <br>
                 <label for="stack-size-villain">Villain Starting Stack</label>
                 <input type="text" name="villainStack">
-                <br>
                 <label for="hero-hand">Enter Hero Hand:</label>
                 <input type="text" name="heroHand" pattern="[A23456789TJQK][schd],[A23456789TJQK][schd]" title="enter your hand in the form Kd,Ts (King of Diamonds, Ten of spades)">
-                <br>
                 <label for="villain-hand">Enter Villain Hand:</label>
                 <input type="text" name="villainHand" pattern="[A23456789TJQK][schd],[A23456789TJQK][schd]" title="enter your hand in the form Kd,Ts (King of Diamonds, Ten of spades)">
-                <br>
                 <input type="submit" value="Update">
             </form>
             </section>
             <!-- PRE FLOP ACTION -->
-            <section class="flop">
+            <section class="preflop">
                 <h1>Pre Flop</h1>
                 <form action="?command=preflop" method="post">
-                <label for="preflopAction">First Action</label>
-                <select name="preflopAction" id="preflopAction">
+                <div class='same-line'>
+                    <label for="preflopAction">Action: </label>
+                    <select name="preflopAction" id="preflopAction">
+                        <option value="call">Call</option>
+                        <option value="check">Check</option>
+                        <option value="bet">Bet</option>
+                        <option value="raise">Raise</option>
+                        <option value="fold">Fold</option>
+                    </select>
+                    <p>Amount: </p>
+                    <input type="text" name="betAmount">
+                </div>
+                <div class='same-line'>
+                <label for="preflopAction2">Action: </label>
+                <select name="preflopAction2" id="preflopAction2">
+                    <option value="call">Call</option>
                     <option value="check">Check</option>
                     <option value="bet">Bet</option>
                     <option value="raise">Raise</option>
                     <option value="fold">Fold</option>
                 </select>
-                <label for="preflopAction2">Second Action</label>
-                <select name="preflopAction2" id="preflopAction2">
-                    <option value="check2">Check</option>
-                    <option value="bet2">Bet</option>
-                    <option value="raise2">Raise</option>
-                    <option value="fold2">Fold</option>
-                </select>
-                <label for="preflopAction3">Third Action</label>
+                <p>Amount: </p>
+                <input type="text" name="betAmount2">
+                </div>
+                <div class='same-line'>
+                <label for="preflopAction3">Action: </label>
                 <select name="preflopAction3" id="preflopAction3">
-                    <option value="check3">Check</option>
-                    <option value="bet3">Bet</option>
-                    <option value="raise3">Raise</option>
-                    <option value="fold3">Fold</option>
+                    <option value="call">Call</option>
+                    <option value="check">Check</option>
+                    <option value="bet">Bet</option>
+                    <option value="raise">Raise</option>
+                    <option value="fold">Fold</option>
                 </select>
-                <label for="preflopAction4">Fourth Action</label>
+                <p>Amount: </p>
+                <input type="text" name="betAmount3">
+                </div>
+                <div class='same-line'>
+                <label for="preflopAction4">Action: </label>
                 <select name="preflopAction4" id="preflopAction4">
-                    <option value="check4">Check</option>
-                    <option value="bet4">Bet</option>
-                    <option value="raise4">Raise</option>
-                    <option value="fold4">Fold</option>
+                    <option value="call">Call</option>
+                    <option value="check">Check</option>
+                    <option value="bet">Bet</option>
+                    <option value="raise">Raise</option>
+                    <option value="fold">Fold</option>
                 </select>
+                <p>Amount: </p>
+                <input type="text" name="betAmount4">
+                </div>
                 <input type="submit" value="Update">
                 </form>
             </section>
@@ -182,41 +243,187 @@
             <section class="flop">
                 <h1>Flop</h1>
                 <form action="?command=addflop" method="post">
-                <label for="flopAction">First Action</label>
+                <label for="flop-cards">Enter 3 Flop Cards:</label>
+                <input type="text" name="flopCards" pattern="[A23456789TJQK][schd],[A23456789TJQK][schd],[A23456789TJQK][schd]" title="enter the cards in the form Kd,Ts (King of Diamonds, Ten of spades)">
+                <br>
+                <div class='same-line'>
+                <label for="flopAction">Action: </label>
                 <select name="flopAction" id="flopAction">
+                    <option value="call">Call</option>
                     <option value="check">Check</option>
                     <option value="bet">Bet</option>
                     <option value="raise">Raise</option>
                     <option value="fold">Fold</option>
                 </select>
-                <label for="flopAction2">Second Action</label>
+                <p>Amount: </p>
+                <input type="text" name="betAmountFlop">
+                </div>
+                <div class='same-line'>
+                <label for="flopAction2">Action: </label>
                 <select name="flopAction2" id="flopAction2">
-                    <option value="check2">Check</option>
-                    <option value="bet2">Bet</option>
-                    <option value="raise2">Raise</option>
-                    <option value="fold2">Fold</option>
+                    <option value="call">Call</option>
+                    <option value="check">Check</option>
+                    <option value="bet">Bet</option>
+                    <option value="raise">Raise</option>
+                    <option value="fold">Fold</option>
                 </select>
-                <label for="flopAction3">Third Action</label>
+                <p>Amount: </p>
+                <input type="text" name="betAmountFlop2">
+                </div>
+                <div class='same-line'>
+                <label for="flopAction3">Action: </label>
                 <select name="flopAction3" id="flopAction3">
-                    <option value="check3">Check</option>
-                    <option value="bet3">Bet</option>
-                    <option value="raise3">Raise</option>
-                    <option value="fold3">Fold</option>
+                    <option value="call">Call</option>
+                    <option value="check">Check</option>
+                    <option value="bet">Bet</option>
+                    <option value="raise">Raise</option>
+                    <option value="fold">Fold</option>
                 </select>
-                <label for="flopAction4">Fourth Action</label>
+                <p>Amount: </p>
+                <input type="text" name="betAmountFlop3">
+                </div>
+                <div class='same-line'>
+                <label for="flopAction4">Action: </label>
                 <select name="flopAction4" id="flopAction4">
-                    <option value="check4">Check</option>
-                    <option value="bet4">Bet</option>
-                    <option value="raise4">Raise</option>
-                    <option value="fold4">Fold</option>
+                    <option value="call">Call</option>
+                    <option value="check">Check</option>
+                    <option value="bet">Bet</option>
+                    <option value="raise">Raise</option>
+                    <option value="fold">Fold</option>
                 </select>
+                <p>Amount: </p>
+                <input type="text" name="betAmountFlop4">
+                </div>
+                <input type="submit" value="Update">
+                </form>
+            </section>
+            <!-- TURN ACTION -->
+            <section class="turn">
+                <h1>Turn</h1>
+                <form action="?command=addturn" method="post">
+                <label for="turn-card">Enter Turn Card:</label>
+                <input type="text" name="turnCard" pattern="[A23456789TJQK][schd]" title="enter the cards in the form Kd,Ts (King of Diamonds, Ten of spades)">
+                <br>
+                <div class='same-line'>
+                <label for="turnAction">Action: </label>
+                <select name="turnAction" id="turnAction">
+                    <option value="call">Call</option>
+                    <option value="check">Check</option>
+                    <option value="bet">Bet</option>
+                    <option value="raise">Raise</option>
+                    <option value="fold">Fold</option>
+                </select>
+                <p>Amount: </p>
+                <input type="text" name="betAmountTurn">
+                </div>
+                <div class='same-line'>
+                <label for="turnAction2">Action: </label>
+                <select name="turnAction2" id="turnAction2">
+                    <option value="call">Call</option>
+                    <option value="check">Check</option>
+                    <option value="bet">Bet</option>
+                    <option value="raise">Raise</option>
+                    <option value="fold">Fold</option>
+                </select>
+                <p>Amount: </p>
+                <input type="text" name="betAmountTurn2">
+                </div>
+                <div class='same-line'>
+                <label for="turnAction3">Action: </label>
+                <select name="turnAction3" id="turnAction3">
+                    <option value="call">Call</option>
+                    <option value="check">Check</option>
+                    <option value="bet">Bet</option>
+                    <option value="raise">Raise</option>
+                    <option value="fold">Fold</option>
+                </select>
+                <p>Amount: </p>
+                <input type="text" name="betAmountTurn3">
+                </div>
+                <div class='same-line'>
+                <label for="turnAction4">Action: </label>
+                <select name="turnAction4" id="turnAction4">
+                    <option value="call">Call</option>
+                    <option value="check">Check</option>
+                    <option value="bet">Bet</option>
+                    <option value="raise">Raise</option>
+                    <option value="fold">Fold</option>
+                </select>
+                <p>Amount: </p>
+                <input type="text" name="betAmountTurn4">
+                </div>
+                <input type="submit" value="Update">
+                </form>
+            </section>
+            <!--RIVER ACTION -->
+            <section class="river">
+                <h1>River</h1>
+                <form action="?command=addriver" method="post">
+                <label for="river-card">Enter River Card:</label>
+                <input type="text" name="riverCard" pattern="[A23456789TJQK][schd]" title="enter the cards in the form Kd,Ts (King of Diamonds, Ten of spades)">
+                <br>
+                <div class='same-line'>
+                <label for="riverAction">Action: </label>
+                <select name="riverAction" id="riverAction">
+                    <option value="call">Call</option>
+                    <option value="check">Check</option>
+                    <option value="bet">Bet</option>
+                    <option value="raise">Raise</option>
+                    <option value="fold">Fold</option>
+                </select>
+                <p>Amount: </p>
+                <input type="text" name="betAmountRiver">
+                </div>
+                <div class='same-line'>
+                <label for="riverAction2">Action: </label>
+                <select name="riverAction2" id="riverAction2">
+                    <option value="call">Call</option>
+                    <option value="check">Check</option>
+                    <option value="bet">Bet</option>
+                    <option value="raise">Raise</option>
+                    <option value="fold">Fold</option>
+                </select>
+                <p>Amount: </p>
+                <input type="text" name="betAmountRiver2">
+                </div>
+                <div class='same-line'>
+                <label for="riverAction3">Action: </label>
+                <select name="riverAction3" id="riverAction3">
+                    <option value="call">Call</option>
+                    <option value="check">Check</option>
+                    <option value="bet">Bet</option>
+                    <option value="raise">Raise</option>
+                    <option value="fold">Fold</option>
+                </select>
+                <p>Amount: </p>
+                <input type="text" name="betAmountRiver3">
+                </div>
+                <div class='same-line'>
+                <label for="riverAction4">Action: </label>
+                <select name="riverAction4" id="riverAction4">
+                    <option value="call">Call</option>
+                    <option value="check">Check</option>
+                    <option value="bet">Bet</option>
+                    <option value="raise">Raise</option>
+                    <option value="fold">Fold</option>
+                </select>
+                <p>Amount: </p>
+                <input type="text" name="betAmountRiver4">
+                </div>
                 <input type="submit" value="Update">
                 </form>
             </section>
     </div>
     <br>
-    <section>
+    <section class="game-info">
         <?=$preflopMessage?>
+    </section>
+    <div class='table-text-container'>
+    <section class='console'>
+        <?=$preflopActionMessage?>
         <?=$flopMessage?>
     </section>
+    <section class="table-image">
+    </section>
+    </div>
 </body>
