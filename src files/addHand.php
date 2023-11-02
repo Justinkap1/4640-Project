@@ -18,7 +18,7 @@
         font-family: Arial, sans-serif;
         margin: 20px;
     }
-    body button{
+    .logout{
         position: fixed;
         top: 10px;
         right: 10px;
@@ -31,7 +31,7 @@
 
     .gameStart-info, .preflop, .flop, .turn, .river{
         position: relative;
-        max-width: 20%;
+        max-width: 23%;
         height: 650px;
         margin: 0;
         padding: 10px;
@@ -39,10 +39,10 @@
         border-radius: 5px;
     }
     .flop select, .preflop select, input[type="text"]{
-        max-width: 60px;
+        max-width: 70px;
     }
     select{
-        max-width: 60px;
+        max-width: 80px;
     }
     form {
         display: flex;
@@ -74,29 +74,6 @@
     .preflop-info {
         margin-top: 20px;
     }
-    .utg{
-        width: 30%;
-        margin: auto;
-    }
-    .utg1{
-        width: 15%;
-        margin: auto;
-        text-align: left;
-    }
-    .utg2{
-        width: 20%;
-        margin: auto;
-        text-align: left;
-    }
-    .mp{
-        width: 15%;
-        margin: auto;
-        text-align: left;
-    }
-    .mp1{
-        width: 10%;
-        margin: auto;
-    }
     .game-info .stacks{
         display: flex;
         flex-direction: row;
@@ -108,14 +85,13 @@
         border-radius: 5%;
         padding: 10px;
         background-color: lightgray;
-
     }
     .table{
         display: flex;
         justify-content: center;
+        gap: 5rem;
     }
     .table-image{
-        border: 1px solid black;
         display: flex;
         justify-content: space-between;
         width: 60%;
@@ -132,10 +108,14 @@
     .table-text-container{
         display: flex;
     }
+    .submit-db{
+        position: fixed;
+        bottom: 5px;
+    }
 </style>
 <body>
     <h1 class="add-hand">Add a Hand</h1>
-    <button>
+    <button class='logout'>
         <a href="?command=logout">Log out</a>
     </button>
     <div class="container">
@@ -149,7 +129,7 @@
                     <option value="5/10">5/10</option>
                     <option value="10/20">10/20</option>
                 </select>
-                <label for="hPosition">Hero Position</label>
+                <label for="hPosition">H Position</label>
                 <select name="hPosition" id="hPosition">
                     <option value="utg">UTG</option>
                     <option value="utg1">UTG+1</option>
@@ -161,7 +141,7 @@
                     <option value="sb">SB</option>
                     <option value="bb">BB</option>
                 </select>
-                <label for="vPosition">Villain Position</label>
+                <label for="vPosition">V Position</label>
                 <select name="vPosition" id="vPosition">
                     <option value="utg">UTG</option>
                     <option value="utg1">UTG+1</option>
@@ -173,13 +153,13 @@
                     <option value="sb">SB</option>
                     <option value="bb">BB</option>
                 </select>
-                <label for="stack-size-hero">Hero Starting Stack</label>
+                <label for="stack-size-hero">H Stack</label>
                 <input type="text" name="heroStack" pattern="[0-9]+" title="Enter hero stack size">
-                <label for="stack-size-villain">Villain Starting Stack</label>
+                <label for="stack-size-villain">V Stack</label>
                 <input type="text" name="villainStack">
-                <label for="hero-hand">Enter Hero Hand:</label>
+                <label for="hero-hand">Hero Hand:</label>
                 <input type="text" name="heroHand" pattern="[A23456789TJQK][schd],[A23456789TJQK][schd]" title="enter your hand in the form Kd,Ts (King of Diamonds, Ten of spades)">
-                <label for="villain-hand">Enter Villain Hand:</label>
+                <label for="villain-hand">Villain Hand:</label>
                 <input type="text" name="villainHand" pattern="[A23456789TJQK][schd],[A23456789TJQK][schd]" title="enter your hand in the form Kd,Ts (King of Diamonds, Ten of spades)">
                 <input type="submit" value="Update">
             </form>
@@ -421,9 +401,11 @@
     <div class='table-text-container'>
     <section class='console'>
         <?=$preflopActionMessage?>
-        <?=$flopMessage?>
     </section>
     <section class="table-image">
     </section>
     </div>
+    <button class="submit-db">
+        <a href="?command=addHH">Submit to DB</a>
+    </button>
 </body>
