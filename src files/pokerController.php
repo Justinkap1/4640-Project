@@ -151,15 +151,15 @@ class pokerController {
             case "addHH":
                 $this->submitDB();
                 break;
-                case "profile":
-                    $this->editProfile();
-                    break;
-                case "ohno":
-                    $this->ohno();
-                    break;
-                case "updateUserInfo":
-                    $this->updateUserInfo();
-                    break;
+            case "profile":
+                $this->editProfile();
+                break;
+            case "ohno":
+                $this->ohno();
+                break;
+            case "updateUserInfo":
+                $this->updateUserInfo();
+                break;
             default:
                 $this->showWelcome();
                 break;
@@ -183,13 +183,15 @@ class pokerController {
     }
 
     public function showWelcome(){
-        include("/opt/src/Project/welcome.php");
+        include("/students/jrk5ak/students/jrk5ak/Project/welcome.php");
+        // include("/opt/src/Project/welcome.php");
     }
 
     public function showHomePage() {
         $name = $_SESSION["name"];
         $email = $_SESSION["email"];
-        include("/opt/src/Project/home.php");
+        // include("/opt/src/Project/home.php");
+        include("/students/jrk5ak/students/jrk5ak/Project/home.php");
     }
 
     public function grabID($email) {
@@ -241,23 +243,30 @@ class pokerController {
     }
     
     public function showAlone(){
-        include("/opt/src/Project/alone.php");
+        include("/students/jrk5ak/students/jrk5ak/Project/alone.php");
+        // include("/opt/src/Project/alone.php");
     }
     
     public function showOnline(){
-        include("/opt/src/Project/online.php");
+        include("/students/jrk5ak/students/jrk5ak/Project/online.php");
+        // include("/opt/src/Project/online.php");
     }
 
     public function showArticles(){
         $name = $_SESSION["name"];
         $email = $_SESSION["email"];
-        include("/opt/src/Project/articles.php");
+        // include("/opt/src/Project/articles.php");
+        include("/students/jrk5ak/students/jrk5ak/Project/articles.php");
     }
 
     public function showHandHistories(){
+        // print_r($_SESSION['myJSON']);
+        // print_r($_SESSION['preflopActionMessage']);
+        // echo "hello world";
         $name = $_SESSION["name"];
         $email = $_SESSION["email"];
-        include("/opt/src/Project/handhistories.php");
+        // include("/opt/src/Project/handhistories.php");
+        include("/students/jrk5ak/students/jrk5ak/Project/handhistories.php");
     }
 
     public function showAddHand(){
@@ -282,13 +291,16 @@ class pokerController {
 
         $name = $_SESSION["name"];
         $email = $_SESSION["email"];
-        include("/opt/src/Project/addHand.php");
+        include("/students/jrk5ak/students/jrk5ak/Project/addHand.php");
+        // include("/opt/src/Project/addHand.php");
     }
 
     public function showSelectHand(){
         $name = $_SESSION["name"];
         $email = $_SESSION["email"];
-        include("/opt/src/Project/selectHand.php");
+        $this->getHands();
+        include("/students/jrk5ak/students/jrk5ak/Project/selectHand.php");
+        // include("/opt/src/Project/selectHand.php");
     }
 
     //Display stacks, blinds, and cards
@@ -1089,19 +1101,108 @@ class pokerController {
     }
 
     public function submitDB(){
-        $preflopActionMessageJSON = $_SESSION['preflopActionMessage'];
-        $textArray = explode("\n", $preflopActionMesageJSON);
-        $jsonArray = [
-            'textEntries' => $textArray
-        ];
+        // $preflopActionMessageJSON = $_SESSION['preflopActionMessage'];
+        $parts= explode("\n", $_SESSION['preflopActionMessage']);
 
-        //the current hand you submit is now in JSON format
-        $_SESSION['jsonData'] = json_encode($jsonArray, JSON_PRETTY_PRINT);
-        $this->$currentTime = date('Y-m-d H:i:s');
+        $outputArray = array();
+
+        $data = array();
+
+        foreach ($parts as $part) {
+            $trimmedPart = trim($part);
+
+            if (!empty($trimmedPart)) {
+                $data[] = $trimmedPart;
+            }
+        }
+
+        $jsonPreflopAction = json_encode($data);
+        $_SESSION['myJSON'] = $jsonPreflopAction;
+        // print_r($parts);
+        // print_r($_SESSION['preflopActionMessage']);
+        // print_r($jsonPreflopAction);
+
+
+
+        // $jsonArray = [
+        //     'textEntries' => $textArray
+        // ];
+
+        // //the current hand you submit is now in JSON format
+        // $_SESSION['jsonData'] = json_encode($jsonArray, JSON_PRETTY_PRINT);
+        // $this->$currentTime = date('Y-m-d H:i:s');
 
         //DB stuff goes here
+        $this->db->query("insert into hands (name, email, hand) values ($1, $2, $3);",
+        $_SESSION["name"], $_SESSION["email"],
+        $_SESSION['myJSON']
+        );
 
         header("Location: ?command=handhistories");
+    }
+
+    public function getHands() {
+        echo "selectHand";
+
+        $targetName = $_SESSION["name"];
+        
+
+        // Build and execute the SQL query
+        $query = "SELECT * FROM hands WHERE name = $1";
+        // $result = pg_query_params($dbHandle, $query, array($targetName));
+        $selectHandArray= $this->db->query("SELECT * FROM hands WHERE name = $1;",
+        $targetName);
+        print_r($selectHandArray);
+
+        // if (!$res) {
+        //     die("Error executing the SQL query");
+        // }
+        // print_r($res);
+
+        echo '<html><head><style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            th, td {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+        </style></head><body>';
+
+        echo '<table>';
+        echo '<tr><th>ID</th><th>Name</th><th>Email</th><th>Hand</th></tr>';
+
+        foreach ($selectHandArray as $row) {
+            echo '<tr>';
+            echo '<td>' . $row['id'] . '</td>';
+            echo '<td>' . $row['name'] . '</td>';
+            echo '<td>' . $row['email'] . '</td>';
+            echo '<td>';
+            foreach ($row['hand'] as $line) {
+                echo nl2br(htmlspecialchars($line)); // Preserve line breaks and escape HTML
+            }
+            echo '</td>';
+            echo '</tr>';
+        }
+
+        echo '</table>';
+        echo '</body></html>';
+
+        // // Fetch and print the results
+        // while ($row = pg_fetch_assoc($res)) {
+        //     echo "ID: " . $row['id'] . "<br>";
+        //     echo "Name: " . $row['name'] . "<br>";
+        //     echo "Email: " . $row['email'] . "<br>";
+        //     echo "Hand: " . $row['hand'] . "<br>";
+        //     echo "<br>";
+        // }
     }
 
     public function logout(){
