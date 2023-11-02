@@ -93,7 +93,7 @@ class pokerController {
      */
     public function __construct($input) {
         session_start();
-        //$this->db = new Database();
+        $this->db = new Database();
         
         $this->input = $input;
     }
@@ -151,10 +151,35 @@ class pokerController {
             case "addHH":
                 $this->submitDB();
                 break;
+                case "profile":
+                    $this->editProfile();
+                    break;
+                case "ohno":
+                    $this->ohno();
+                    break;
+                case "updateUserInfo":
+                    $this->updateUserInfo();
+                    break;
             default:
                 $this->showWelcome();
                 break;
         }
+    }
+
+    public function updateUserInfo() {
+        
+        $res = $this->db->query("UPDATE users SET name = $1 WHERE id = $2", $_POST["name"], $_SESSION['id']);
+        $_SESSION['name'] = $_POST["name"];
+        header("Location: ?command=homePage");
+    }
+
+    public function editProfile(){
+        $this->grabID($_SESSION["email"]);
+        include("/opt/src/Project/profile.php");
+    }
+
+    public function ohno() {
+        include("/opt/src/Project/ohno.php");
     }
 
     public function showWelcome(){
@@ -167,15 +192,52 @@ class pokerController {
         include("/opt/src/Project/home.php");
     }
 
+    public function grabID($email) {
+        $res = $this->db->query("SELECT id FROM users WHERE email = $1;", $email);
+        $_SESSION['id'] = $res[0]['id'];
+        echo $_SESSION['id'];
+        echo $_SESSION['name'];
+    }
+
     public function login(){
-        if(isset($_POST["username"])) {
-            $_SESSION["name"] = $_POST["username"];
+        if(isset($_POST["name"]) && !empty($_POST["name"]) &&
+        isset($_POST["email"]) && !empty($_POST["email"]) &&
+        isset($_POST["password"]) && !empty($_POST["password"])) {
+
+            // Check if user is in database
+            $res = $this->db->query("select * from users where email = $1;", $_POST["email"]);
+
+            if (empty($res)) {
+                // User was not there, so insert them
+
+                $this->db->query("insert into users (name, email, password) values ($1, $2, $3);",
+                $_POST["name"], $_POST["email"],
+                password_hash($_POST["password"], PASSWORD_DEFAULT));
+
+                $_SESSION["name"] = $_POST["name"];
+                $_SESSION["email"] = $_POST["email"];
+                
+
+                // Send user to the appropriate page (question)
+                header("Location: ?command=homePage");
+                return;
+            } else {
+                // User was in the database, verify password
+                if (password_verify($_POST["password"], $res[0]["password"])) {
+                    // Password was correct
+                    $_SESSION["name"] = $res[0]["name"];
+                    $_SESSION["email"] = $res[0]["email"];
+                    header("Location: ?command=question");
+                    return;
+                } else {
+                    $this->errorMessage = "Incorrect password.";
+                }
+            }
+        } else {
+            $this->errorMessage = "Name, email, and password are required.";
         }
 
-        if(isset($_POST["email"])) {
-            $_SESSION["email"] = $_POST["email"];
-        }
-        header("Location: ?command=homePage");
+        $this->ohno();
     }
     
     public function showAlone(){

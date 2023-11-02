@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Form</title>
+    <title>Edit User Info</title>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -63,23 +63,18 @@
         }
     </style>
 </head>
-
 <body>
-    <h2>Login Form</h2>
-    <form method="post" action="?command=login">
-        <label for="username">Username:</label>
+    <h2>Edit User Info</h2>
+    <form method="post" action="?command=updateUserInfo">
+        <label for="username">New Name:</label>
         <input type="text" name="name" id="name" required>
         <br>
 
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" required>
+        <!-- <label for="password">New Password:</label>
+        <input type="password" name="new_password" id="new_password" required> -->
         <br>
 
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" required>
-        <br>
-
-        <input type="submit" value="Login">
+        <input type="submit" value="Update Info">
     </form>
 </body>
 </html>
