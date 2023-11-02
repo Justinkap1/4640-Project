@@ -13,7 +13,11 @@ class Database {
         $port = Config::$db["port"];
 
         $this->dbConnector = pg_connect("host=$host port=$port dbname=$database user=$user password=$password");
+
     }
+
+    
+    
 
     public function query($query, ...$params) {
         // Use safe querying
@@ -29,4 +33,5 @@ class Database {
         // in the database)
         return pg_fetch_all($res);
     }
+
 }
