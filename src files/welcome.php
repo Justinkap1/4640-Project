@@ -81,5 +81,7 @@
 
         <input type="submit" value="Login">
     </form>
+    <?php 
+    echo $message?>
 </body>
 </html>
