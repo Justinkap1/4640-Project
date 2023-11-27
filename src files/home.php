@@ -10,11 +10,6 @@
     
     <title>Home</title>  
 </head>
-
-
-<?php 
-echo $_SESSION['name'];
-?>
 <body>
     <header>
         <div class="header-top" id="main-header">

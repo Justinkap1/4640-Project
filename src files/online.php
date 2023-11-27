@@ -14,19 +14,19 @@
 
     <div class="navbar">
         <a href="?command=homePage" class="nav-item">
-            <img src="/assets/pokerchip.jpg" alt="chip">
+            <img src="../projectAssets/pokerchip.jpg" alt="chip">
             <div class="text-container">Home</div>
         </a>
         <a href="?command=alone" class="nav-item">
-            <img src="/assets/pokerchip.jpg" alt="chip">
+            <img src="../projectAssets/pokerchip.jpg" alt="chip">
             <div class="text-container">Play Alone</div>
         </a>
         <a href="?command=handhistories" class="nav-item">
-            <img src="/assets/pokerchip.jpg" alt="chip">
+            <img src="../projectAssets/pokerchip.jpg" alt="chip">
             <div class="text-container">Hand History</div>
         </a>
         <a href="?command=articles" class="nav-item">
-            <img src="/assets/pokerchip.jpg" alt="chip">
+            <img src="../projectAssets/pokerchip.jpg" alt="chip">
             <div class="text-container">Articles</div>
         </a> 
     </div>
@@ -70,36 +70,48 @@
             </div>
             <!-- Friends List -->
             <div>
-                <h3 style="text-align: center;color: white;"> Friends </h3>
+                <h3 style="text-align: center; color: white;"> Friends </h3>
                 <div class="friends-list">
-                    <div class="friend-item">
-                        <div class="add-friend">+</div>
-                        <span class="friend-name">John Doe</span>
-                        <!-- <span class="friend-status">Online</span> -->
-                    </div>
-                    <div class="friend-item">
-                        <div class="add-friend">+</div>
-                        <span class="friend-name">Jane Smith</span>
-                        <!-- <span class="friend-status">Offline</span> -->
-                    </div>
-                    <div class="friend-item">
-                        <div class="add-friend">+</div>
-                        <span class="friend-name">Bob Johnson</span>
-                        <!-- <span class="friend-status">Online</span> -->
-                    </div>
+                    <form method="post" action="?command=searchFriend">
+                        <label for="searchFriend">Add Friend:</label>
+                        <input type="text" name="searchFriend" id="searchFriend" required>
+                        <br>
+                        <input type="submit" value="SearchFriend">
+                    </form>
+
+                    <?php
+                    // Check if friends data is set in the session
+                    if (isset($_SESSION['friends'])) {
+                        // Loop through each friend in the 2D array
+                        foreach ($_SESSION['friends'] as $friend) {
+                            $friendName = $friend['friendname'];
+                            $friendEmail = $friend['friendemail'];
+                    ?>
+                            <div class="friend-item">
+                                <div class="add-friend">+</div>
+                                <span class="friend-name"><?php echo $friendName; ?></span>
+                                <!-- Displaying friend email is optional -->
+                                <!-- <span class="friend-email"><?php echo $friendEmail; ?></span> -->
+                            </div>
+                    <?php
+                        }
+                    }
+                    ?>
                 </div>
-        </div>
+            </div>
+
+
     
 
 
     <footer class="main-footer" id="main-foot">
         <ul class="links">
-            <li><img src="/assets/twitter.png" alt="twitter"></li>
-            <li><img src="/assets/discord.png" alt="discord"></li>
-            <li><img src="/assets/instagram.png" alt="instagram"></li>
+            <li><img src="/projectAssets/twitter.png" alt="twitter"></li>
+            <li><img src="/projectAssets/discord.png" alt="discord"></li>
+            <li><img src="/projectAssets/instagram.png" alt="instagram"></li>
         </ul>
         <ul class="pfp-footer">
-            <li style="list-style: none;"><img src="/assets/pfp.jpg" alt="profile"></li>
+            <li style="list-style: none;"><img src="/projectAssets/pfp.jpg" alt="profile"></li>
         </ul>
 
         <small>Copyright Justin Kaplan and Mihir Sangameswar 2023</small>

@@ -3,58 +3,58 @@
 date_default_timezone_set('America/New_York');
 class pokerController {
     private $cardDict = array(
-        "Ah" => "<img src='../projectAssets/ace_of_hearts.png' alt='Ace of Hearts' width='55' height='70'>",
-        "Ad" => "<img src='../projectAssets/ace_of_diamonds.png' alt='Ace of Diamonds' width='55' height='70'>",
-        "As" => "<img src='../projectAssets/ace_of_spades.png' alt='Ace of Spades' width='55' height='70'>",
-        "Ac" => "<img src='../projectAssets/ace_of_clubs.png' alt='Ace of Clubs' width='55' height='70'>",
-        "Kh" => "<img src='../projectAssets/king_of_hearts.png' alt='King of Hearts' width='55' height='70'>",
-        "Kd" => "<img src='../projectAssets/king_of_diamonds.png' alt='King of Diamonds' width='55' height='70'>",
-        "Ks" => "<img src='../projectAssets/king_of_spades.png' alt='King of Spades' width='55' height='70'>",
-        "Kc" => "<img src='../projectAssets/king_of_clubs.png' alt='King of Clubs' width='55' height='70'>",
-        "Qh" => "<img src='../projectAssets/queen_of_hearts.png' alt='Queen of Hearts' width='55' height='70'>",
-        "Qd" => "<img src='../projectAssets/queen_of_diamonds.png' alt='Queen of Diamonds' width='55' height='70'>",
-        "Qs" => "<img src='../projectAssets/queen_of_spades.png' alt='Queen of Spades' width='55' height='70'>",
-        "Qc" => "<img src='../projectAssets/queen_of_clubs.png' alt='Queen of Clubs' width='55' height='70'>",
-        "Jh" => "<img src='../projectAssets/jack_of_hearts.png' alt='Jack of Hearts' width='55' height='70'>",
-        "Jd" => "<img src='../projectAssets/jack_of_diamonds.png' alt='Jack of Diamonds' width='55' height='70'>",
-        "Js" => "<img src='../projectAssets/jack_of_spades.png' alt='Jack of Spades' width='55' height='70'>",
-        "Jc" => "<img src='../projectAssets/jack_of_clubs.png' alt='Jack of Clubs' width='55' height='70'>",
-        "Th" => "<img src='../projectAssets/10_of_hearts.png' alt='10 of Hearts' width='55' height='70'>",
-        "Td" => "<img src='../projectAssets/10_of_diamonds.png' alt='10 of Diamonds' width='55' height='70'>",
-        "Ts" => "<img src='../projectAssets/10_of_spades.png' alt='10 of Spades' width='55' height='70'>",
-        "Tc" => "<img src='../projectAssets/10_of_clubs.png' alt='10 of Clubs' width='55' height='70'>",
-        "9h" => "<img src='../projectAssets/9_of_hearts.png' alt='9 of Hearts' width='55' height='70'>",
-        "9d" => "<img src='../projectAssets/9_of_diamonds.png' alt='9 of Diamonds' width='55' height='70'>",
-        "9s" => "<img src='../projectAssets/9_of_spades.png' alt='9 of Spades' width='55' height='70'>",
-        "9c" => "<img src='../projectAssets/9_of_clubs.png' alt='9 of Clubs' width='55' height='70'>",
-        "8h" => "<img src='../projectAssets/8_of_hearts.png' alt='8 of Hearts' width='55' height='70'>",
-        "8d" => "<img src='../projectAssets/8_of_diamonds.png' alt='8 of Diamonds' width='55' height='70'>",
-        "8s" => "<img src='../projectAssets/8_of_spades.png' alt='8 of Spades' width='55' height='70'>",
-        "8c" => "<img src='../projectAssets/8_of_clubs.png' alt='8 of Clubs' width='55' height='70'>",
-        "7h" => "<img src='../projectAssets/7_of_hearts.png' alt='7 of Hearts' width='55' height='70'>",
-        "7d" => "<img src='../projectAssets/7_of_diamonds.png' alt='7 of Diamonds' width='55' height='70'>",
-        "7s" => "<img src='../projectAssets/7_of_spades.png' alt='7 of Spades' width='55' height='70'>",
-        "7c" => "<img src='../projectAssets/7_of_clubs.png' alt='7 of Clubs' width='55' height='70'>",
-        "6h" => "<img src='../projectAssets/6_of_hearts.png' alt='6 of Hearts' width='55' height='70'>",
-        "6d" => "<img src='../projectAssets/6_of_diamonds.png' alt='6 of Diamonds' width='55' height='70'>",
-        "6s" => "<img src='../projectAssets/6_of_spades.png' alt='6 of Spades' width='55' height='70'>",
-        "6c" => "<img src='../projectAssets/6_of_clubs.png' alt='6 of Clubs' width='55' height='70'>",
-        "5h" => "<img src='../projectAssets/5_of_hearts.png' alt='5 of Hearts' width='55' height='70'>",
-        "5d" => "<img src='../projectAssets/5_of_diamonds.png' alt='5 of Diamonds' width='55' height='70'>",
-        "5s" => "<img src='../projectAssets/5_of_spades.png' alt='5 of Spades' width='55' height='70'>",
-        "5c" => "<img src='../projectAssets/5_of_clubs.png' alt='5 of Clubs' width='55' height='70'>",
-        "4h" => "<img src='../projectAssets/4_of_hearts.png' alt='4 of Hearts' width='55' height='70'>",
-        "4d" => "<img src='../projectAssets/4_of_diamonds.png' alt='4 of Diamonds' width='55' height='70'>",
-        "4s" => "<img src='../projectAssets/4_of_spades.png' alt='4 of Spades' width='55' height='70'>",
-        "4c" => "<img src='../projectAssets/4_of_clubs.png' alt='4 of Clubs' width='55' height='70'>",
-        "3h" => "<img src='../projectAssets/3_of_hearts.png' alt='3 of Hearts' width='55' height='70'>",
-        "3d" => "<img src='../projectAssets/3_of_diamonds.png' alt='3 of Diamonds' width='55' height='70'>",
-        "3s" => "<img src='../projectAssets/3_of_spades.png' alt='3 of Spades' width='55' height='70'>",
-        "3c" => "<img src='../projectAssets/3_of_clubs.png' alt='3 of Clubs' width='55' height='70'>",
-        "2h" => "<img src='../projectAssets/2_of_hearts.png' alt='2 of Hearts' width='55' height='70'>",
-        "2d" => "<img src='../projectAssets/2_of_diamonds.png' alt='2 of Diamonds' width='55' height='70'>",
-        "2s" => "<img src='../projectAssets/2_of_spades.png' alt='2 of Spades' width='55' height='70'>",
-        "2c" => "<img src='../projectAssets/2_of_clubs.png' alt='2 of Clubs' width='55' height='70'>"
+        "Ah" => "<img src='projectAssets/ace_of_hearts.png' alt='Ace of Hearts' width='55' height='70'>",
+        "Ad" => "<img src='projectAssets/ace_of_diamonds.png' alt='Ace of Diamonds' width='55' height='70'>",
+        "As" => "<img src='projectAssets/ace_of_spades.png' alt='Ace of Spades' width='55' height='70'>",
+        "Ac" => "<img src='projectAssets/ace_of_clubs.png' alt='Ace of Clubs' width='55' height='70'>",
+        "Kh" => "<img src='projectAssets/king_of_hearts.png' alt='King of Hearts' width='55' height='70'>",
+        "Kd" => "<img src='projectAssets/king_of_diamonds.png' alt='King of Diamonds' width='55' height='70'>",
+        "Ks" => "<img src='projectAssets/king_of_spades.png' alt='King of Spades' width='55' height='70'>",
+        "Kc" => "<img src='projectAssets/king_of_clubs.png' alt='King of Clubs' width='55' height='70'>",
+        "Qh" => "<img src='projectAssets/queen_of_hearts.png' alt='Queen of Hearts' width='55' height='70'>",
+        "Qd" => "<img src='projectAssets/queen_of_diamonds.png' alt='Queen of Diamonds' width='55' height='70'>",
+        "Qs" => "<img src='projectAssets/queen_of_spades.png' alt='Queen of Spades' width='55' height='70'>",
+        "Qc" => "<img src='projectAssets/queen_of_clubs.png' alt='Queen of Clubs' width='55' height='70'>",
+        "Jh" => "<img src='projectAssets/jack_of_hearts.png' alt='Jack of Hearts' width='55' height='70'>",
+        "Jd" => "<img src='projectAssets/jack_of_diamonds.png' alt='Jack of Diamonds' width='55' height='70'>",
+        "Js" => "<img src='projectAssets/jack_of_spades.png' alt='Jack of Spades' width='55' height='70'>",
+        "Jc" => "<img src='projectAssets/jack_of_clubs.png' alt='Jack of Clubs' width='55' height='70'>",
+        "Th" => "<img src='projectAssets/10_of_hearts.png' alt='10 of Hearts' width='55' height='70'>",
+        "Td" => "<img src='projectAssets/10_of_diamonds.png' alt='10 of Diamonds' width='55' height='70'>",
+        "Ts" => "<img src='projectAssets/10_of_spades.png' alt='10 of Spades' width='55' height='70'>",
+        "Tc" => "<img src='projectAssets/10_of_clubs.png' alt='10 of Clubs' width='55' height='70'>",
+        "9h" => "<img src='projectAssets/9_of_hearts.png' alt='9 of Hearts' width='55' height='70'>",
+        "9d" => "<img src='projectAssets/9_of_diamonds.png' alt='9 of Diamonds' width='55' height='70'>",
+        "9s" => "<img src='projectAssets/9_of_spades.png' alt='9 of Spades' width='55' height='70'>",
+        "9c" => "<img src='projectAssets/9_of_clubs.png' alt='9 of Clubs' width='55' height='70'>",
+        "8h" => "<img src='projectAssets/8_of_hearts.png' alt='8 of Hearts' width='55' height='70'>",
+        "8d" => "<img src='projectAssets/8_of_diamonds.png' alt='8 of Diamonds' width='55' height='70'>",
+        "8s" => "<img src='projectAssets/8_of_spades.png' alt='8 of Spades' width='55' height='70'>",
+        "8c" => "<img src='projectAssets/8_of_clubs.png' alt='8 of Clubs' width='55' height='70'>",
+        "7h" => "<img src='projectAssets/7_of_hearts.png' alt='7 of Hearts' width='55' height='70'>",
+        "7d" => "<img src='projectAssets/7_of_diamonds.png' alt='7 of Diamonds' width='55' height='70'>",
+        "7s" => "<img src='projectAssets/7_of_spades.png' alt='7 of Spades' width='55' height='70'>",
+        "7c" => "<img src='projectAssets/7_of_clubs.png' alt='7 of Clubs' width='55' height='70'>",
+        "6h" => "<img src='projectAssets/6_of_hearts.png' alt='6 of Hearts' width='55' height='70'>",
+        "6d" => "<img src='projectAssets/6_of_diamonds.png' alt='6 of Diamonds' width='55' height='70'>",
+        "6s" => "<img src='projectAssets/6_of_spades.png' alt='6 of Spades' width='55' height='70'>",
+        "6c" => "<img src='projectAssets/6_of_clubs.png' alt='6 of Clubs' width='55' height='70'>",
+        "5h" => "<img src='projectAssets/5_of_hearts.png' alt='5 of Hearts' width='55' height='70'>",
+        "5d" => "<img src='projectAssets/5_of_diamonds.png' alt='5 of Diamonds' width='55' height='70'>",
+        "5s" => "<img src='projectAssets/5_of_spades.png' alt='5 of Spades' width='55' height='70'>",
+        "5c" => "<img src='projectAssets/5_of_clubs.png' alt='5 of Clubs' width='55' height='70'>",
+        "4h" => "<img src='projectAssets/4_of_hearts.png' alt='4 of Hearts' width='55' height='70'>",
+        "4d" => "<img src='projectAssets/4_of_diamonds.png' alt='4 of Diamonds' width='55' height='70'>",
+        "4s" => "<img src='projectAssets/4_of_spades.png' alt='4 of Spades' width='55' height='70'>",
+        "4c" => "<img src='projectAssets/4_of_clubs.png' alt='4 of Clubs' width='55' height='70'>",
+        "3h" => "<img src='projectAssets/3_of_hearts.png' alt='3 of Hearts' width='55' height='70'>",
+        "3d" => "<img src='projectAssets/3_of_diamonds.png' alt='3 of Diamonds' width='55' height='70'>",
+        "3s" => "<img src='projectAssets/3_of_spades.png' alt='3 of Spades' width='55' height='70'>",
+        "3c" => "<img src='projectAssets/3_of_clubs.png' alt='3 of Clubs' width='55' height='70'>",
+        "2h" => "<img src='projectAssets/2_of_hearts.png' alt='2 of Hearts' width='55' height='70'>",
+        "2d" => "<img src='projectAssets/2_of_diamonds.png' alt='2 of Diamonds' width='55' height='70'>",
+        "2s" => "<img src='projectAssets/2_of_spades.png' alt='2 of Spades' width='55' height='70'>",
+        "2c" => "<img src='projectAssets/2_of_clubs.png' alt='2 of Clubs' width='55' height='70'>"
     );
 
     private $positionDict = array(
@@ -160,6 +160,12 @@ class pokerController {
             case "updateUserInfo":
                 $this->updateUserInfo();
                 break;
+            case "searchFriend":
+                $this->searchFriend();
+                break;
+            case "testAjax":
+                $this->testAjax();
+                break;
             default:
                 $this->showWelcome();
                 break;
@@ -168,40 +174,58 @@ class pokerController {
 
     public function updateUserInfo() {
         
-        $res = $this->db->query("UPDATE users SET name = $1 WHERE id = $2", $_POST["name"], $_SESSION['id']);
+        $res = $this->db->query("UPDATE users SET name = $1 WHERE email = $2", $_POST["name"], $_SESSION['email']);
+
+        // update in hands db
+        $res = $this->db->query("select * from hands where email = $1;", $_SESSION["email"]);
+        if(!empty($res)) {
+            $res = $this->db->query("UPDATE hands SET name = $1 WHERE email = $2", $_POST["name"], $_SESSION['email']);
+        }
+
+        //update in friends db
+        $res = $this->db->query("select * from friends where email = $1;", $_SESSION["email"]);
+        if(!empty($res)) {
+            $res = $this->db->query("UPDATE friends SET name = $1 WHERE email = $2", $_POST["name"], $_SESSION['email']);
+        }
+
         $_SESSION['name'] = $_POST["name"];
         header("Location: ?command=homePage");
     }
 
     public function editProfile(){
         $this->grabID($_SESSION["email"]);
+        // include("/students/jrk5ak/students/jrk5ak/Project/profile.php");
         include("/opt/src/Project/profile.php");
     }
 
     public function ohno() {
+        // include("/students/jrk5ak/students/jrk5ak/Project/ohno.php");
         include("/opt/src/Project/ohno.php");
     }
 
     public function showWelcome(){
-        include("/students/jrk5ak/students/jrk5ak/Project/welcome.php");
-        // include("/opt/src/Project/welcome.php");
+        $message .= "<p class='alert alert-danger'>".$_SESSION['errorMessage']."</p>";
+        // include("/students/jrk5ak/students/jrk5ak/Project/welcome.php");
+        include("/opt/src/Project/welcome.php");
     }
 
     public function showHomePage() {
         $name = $_SESSION["name"];
         $email = $_SESSION["email"];
-        // include("/opt/src/Project/home.php");
-        include("/students/jrk5ak/students/jrk5ak/Project/home.php");
+        include("/opt/src/Project/home.php");
+        // include("/students/jrk5ak/students/jrk5ak/Project/home.php");
+        
     }
 
     public function grabID($email) {
         $res = $this->db->query("SELECT id FROM users WHERE email = $1;", $email);
         $_SESSION['id'] = $res[0]['id'];
-        echo $_SESSION['id'];
-        echo $_SESSION['name'];
+        //echo $_SESSION['id'];
+        //echo $_SESSION['name'];
     }
 
     public function login(){
+        
         if(isset($_POST["name"]) && !empty($_POST["name"]) &&
         isset($_POST["email"]) && !empty($_POST["email"]) &&
         isset($_POST["password"]) && !empty($_POST["password"])) {
@@ -218,45 +242,49 @@ class pokerController {
 
                 $_SESSION["name"] = $_POST["name"];
                 $_SESSION["email"] = $_POST["email"];
-                
 
                 // Send user to the appropriate page (question)
                 header("Location: ?command=homePage");
                 return;
             } else {
                 // User was in the database, verify password
-                if (password_verify($_POST["password"], $res[0]["password"])) {
+                if (password_verify($_POST["password"], $res[0]["password"]) && $_POST["name"] === $res[0]["name"]) {
                     // Password was correct
                     $_SESSION["name"] = $res[0]["name"];
                     $_SESSION["email"] = $res[0]["email"];
-                    header("Location: ?command=question");
+                    header("Location: ?command=homePage");
                     return;
                 } else {
-                    $this->errorMessage = "Incorrect password.";
+                    $_SESSION['errorMessage'] = "Incorrect password.";
+                    header("Location: ?command=welcome");
                 }
             }
         } else {
-            $this->errorMessage = "Name, email, and password are required.";
+            $_SESSION['errorMessage'] = "Name, email, and password are required.";
         }
 
         $this->ohno();
     }
     
     public function showAlone(){
-        include("/students/jrk5ak/students/jrk5ak/Project/alone.php");
-        // include("/opt/src/Project/alone.php");
+        // include("/students/jrk5ak/students/jrk5ak/Project/alone.php");
+        include("/opt/src/Project/alone.php");
     }
     
     public function showOnline(){
-        include("/students/jrk5ak/students/jrk5ak/Project/online.php");
-        // include("/opt/src/Project/online.php");
+        // include("/students/jrk5ak/students/jrk5ak/Project/online.php");
+
+        $_SESSION['friends']= $this->db->query("SELECT * FROM friends WHERE email = $1;",
+        $_SESSION['email']);
+
+        include("/opt/src/Project/online.php");
     }
 
     public function showArticles(){
         $name = $_SESSION["name"];
         $email = $_SESSION["email"];
-        // include("/opt/src/Project/articles.php");
-        include("/students/jrk5ak/students/jrk5ak/Project/articles.php");
+        include("/opt/src/Project/articles.php");
+        // include("/students/jrk5ak/students/jrk5ak/Project/articles.php");
     }
 
     public function showHandHistories(){
@@ -265,8 +293,8 @@ class pokerController {
         // echo "hello world";
         $name = $_SESSION["name"];
         $email = $_SESSION["email"];
-        // include("/opt/src/Project/handhistories.php");
-        include("/students/jrk5ak/students/jrk5ak/Project/handhistories.php");
+        include("/opt/src/Project/handhistories.php");
+        // include("/students/jrk5ak/students/jrk5ak/Project/handhistories.php");
     }
 
     public function showAddHand(){
@@ -291,16 +319,16 @@ class pokerController {
 
         $name = $_SESSION["name"];
         $email = $_SESSION["email"];
-        include("/students/jrk5ak/students/jrk5ak/Project/addHand.php");
-        // include("/opt/src/Project/addHand.php");
+        // include("/students/jrk5ak/students/jrk5ak/Project/addHand.php");
+        include("/opt/src/Project/addHand.php");
     }
 
     public function showSelectHand(){
         $name = $_SESSION["name"];
         $email = $_SESSION["email"];
         $this->getHands();
-        include("/students/jrk5ak/students/jrk5ak/Project/selectHand.php");
-        // include("/opt/src/Project/selectHand.php");
+        // include("/students/jrk5ak/students/jrk5ak/Project/selectHand.php");
+        include("/opt/src/Project/selectHand.php");
     }
 
     //Display stacks, blinds, and cards
@@ -382,6 +410,7 @@ class pokerController {
     public function preFlopAction(){
 
         //set actions from selected checkboxes to variables
+        $_SESSION['blinds'] = $_POST['blindss'];
         $preflopFirstAction = $_POST['preflopAction'];
         $preflopSecondAction = $_POST['preflopAction2'];
         $preflopThirdAction = $_POST['preflopAction3'];
@@ -1142,67 +1171,58 @@ class pokerController {
     }
 
     public function getHands() {
-        echo "selectHand";
+        $targetName = $_SESSION["email"];
 
-        $targetName = $_SESSION["name"];
-        
 
         // Build and execute the SQL query
-        $query = "SELECT * FROM hands WHERE name = $1";
-        // $result = pg_query_params($dbHandle, $query, array($targetName));
-        $selectHandArray= $this->db->query("SELECT * FROM hands WHERE name = $1;",
+        $selectHandArray= $this->db->query("SELECT * FROM hands WHERE email = $1;",
         $targetName);
-        print_r($selectHandArray);
 
-        // if (!$res) {
-        //     die("Error executing the SQL query");
-        // }
-        // print_r($res);
+        $_SESSION['forSelectHand'] = $selectHandArray;
+    }
 
-        echo '<html><head><style>
-            table {
-                border-collapse: collapse;
-                width: 100%;
+    public function getEmail($name) {
+        $res = $this->db->query("SELECT email FROM users WHERE name = $1;", $name);
+        // $_SESSION['id'] = $res[0]['id'];
+        // echo $_SESSION['id'];
+        // echo $_SESSION['name'];
+        $_SESSION['friendEmail'] = $res[0]['email'];
+    }
+
+    public function searchFriend() {
+        if(isset($_POST['searchFriend']) && !empty($_POST['searchFriend'])) {
+            if($_POST['searchFriend'] == $_SESSION['name']) {
+                $this->errorMessage = "You cannot add yourself as a friend";
+                return;
             }
 
-            th, td {
-                border: 1px solid #dddddd;
-                text-align: left;
-                padding: 8px;
-            }
+            $res = $this->db->query("select * from users where name = $1;", $_POST["searchFriend"]);
 
-            tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
-        </style></head><body>';
+            if (!empty($res)) {
 
-        echo '<table>';
-        echo '<tr><th>ID</th><th>Name</th><th>Email</th><th>Hand</th></tr>';
+                // TODO: DONT ADD DUPLICATE FRIENDS
+                $this->getEmail($_POST['searchFriend']);
+                $this->db->query("INSERT INTO FRIENDS (name, email, friendName, friendEmail) values ($1, $2, $3, $4);",
+                $_SESSION["name"], $_SESSION["email"],
+                $_POST['searchFriend'], $_SESSION['friendEmail']
+                );
 
-        foreach ($selectHandArray as $row) {
-            echo '<tr>';
-            echo '<td>' . $row['id'] . '</td>';
-            echo '<td>' . $row['name'] . '</td>';
-            echo '<td>' . $row['email'] . '</td>';
-            echo '<td>';
-            foreach ($row['hand'] as $line) {
-                echo nl2br(htmlspecialchars($line)); // Preserve line breaks and escape HTML
+                header("Location: ?command=online");
+            } 
+            else {
+                // TODO: ADD THIS FUNCTIONALITY
+                $this->errorMessage = "Player doesn't exist.";
             }
-            echo '</td>';
-            echo '</tr>';
         }
 
-        echo '</table>';
-        echo '</body></html>';
+    }
 
-        // // Fetch and print the results
-        // while ($row = pg_fetch_assoc($res)) {
-        //     echo "ID: " . $row['id'] . "<br>";
-        //     echo "Name: " . $row['name'] . "<br>";
-        //     echo "Email: " . $row['email'] . "<br>";
-        //     echo "Hand: " . $row['hand'] . "<br>";
-        //     echo "<br>";
-        // }
+    public function getNews() {
+        $mihirsKey="ccab0c64b2a04a2fb240828366a80f69";
+    }
+
+    public function testAjax() {
+        include("/opt/src/Project/testAjax.php");
     }
 
     public function logout(){
