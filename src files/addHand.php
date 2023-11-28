@@ -97,7 +97,7 @@
         width: 60%;
         height: 500px;
         margin: auto;
-        background-image: url('../projectAssets/table-display.jpg');
+        background-image: url('projectAssets/table-display.jpg');
         background-repeat: no-repeat;
         background-size: 100% 100%;
         position: relative;
@@ -217,6 +217,7 @@
                 <input type="text" name="betAmount4">
                 </div>
                 <input type="submit" value="Update">
+                <input type="hidden" value="<?php echo $_SESSION['blinds']; ?>" name="blindss">
                 </form>
             </section>
             <!-- FLOP ACTION -->

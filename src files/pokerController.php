@@ -3,58 +3,58 @@
 date_default_timezone_set('America/New_York');
 class pokerController {
     private $cardDict = array(
-        "Ah" => "<img src='projectAssets/ace_of_hearts.png' alt='Ace of Hearts' width='55' height='70'>",
-        "Ad" => "<img src='projectAssets/ace_of_diamonds.png' alt='Ace of Diamonds' width='55' height='70'>",
-        "As" => "<img src='projectAssets/ace_of_spades.png' alt='Ace of Spades' width='55' height='70'>",
-        "Ac" => "<img src='projectAssets/ace_of_clubs.png' alt='Ace of Clubs' width='55' height='70'>",
-        "Kh" => "<img src='projectAssets/king_of_hearts.png' alt='King of Hearts' width='55' height='70'>",
-        "Kd" => "<img src='projectAssets/king_of_diamonds.png' alt='King of Diamonds' width='55' height='70'>",
-        "Ks" => "<img src='projectAssets/king_of_spades.png' alt='King of Spades' width='55' height='70'>",
-        "Kc" => "<img src='projectAssets/king_of_clubs.png' alt='King of Clubs' width='55' height='70'>",
-        "Qh" => "<img src='projectAssets/queen_of_hearts.png' alt='Queen of Hearts' width='55' height='70'>",
-        "Qd" => "<img src='projectAssets/queen_of_diamonds.png' alt='Queen of Diamonds' width='55' height='70'>",
-        "Qs" => "<img src='projectAssets/queen_of_spades.png' alt='Queen of Spades' width='55' height='70'>",
-        "Qc" => "<img src='projectAssets/queen_of_clubs.png' alt='Queen of Clubs' width='55' height='70'>",
-        "Jh" => "<img src='projectAssets/jack_of_hearts.png' alt='Jack of Hearts' width='55' height='70'>",
-        "Jd" => "<img src='projectAssets/jack_of_diamonds.png' alt='Jack of Diamonds' width='55' height='70'>",
-        "Js" => "<img src='projectAssets/jack_of_spades.png' alt='Jack of Spades' width='55' height='70'>",
-        "Jc" => "<img src='projectAssets/jack_of_clubs.png' alt='Jack of Clubs' width='55' height='70'>",
-        "Th" => "<img src='projectAssets/10_of_hearts.png' alt='10 of Hearts' width='55' height='70'>",
-        "Td" => "<img src='projectAssets/10_of_diamonds.png' alt='10 of Diamonds' width='55' height='70'>",
-        "Ts" => "<img src='projectAssets/10_of_spades.png' alt='10 of Spades' width='55' height='70'>",
-        "Tc" => "<img src='projectAssets/10_of_clubs.png' alt='10 of Clubs' width='55' height='70'>",
-        "9h" => "<img src='projectAssets/9_of_hearts.png' alt='9 of Hearts' width='55' height='70'>",
-        "9d" => "<img src='projectAssets/9_of_diamonds.png' alt='9 of Diamonds' width='55' height='70'>",
-        "9s" => "<img src='projectAssets/9_of_spades.png' alt='9 of Spades' width='55' height='70'>",
-        "9c" => "<img src='projectAssets/9_of_clubs.png' alt='9 of Clubs' width='55' height='70'>",
-        "8h" => "<img src='projectAssets/8_of_hearts.png' alt='8 of Hearts' width='55' height='70'>",
-        "8d" => "<img src='projectAssets/8_of_diamonds.png' alt='8 of Diamonds' width='55' height='70'>",
-        "8s" => "<img src='projectAssets/8_of_spades.png' alt='8 of Spades' width='55' height='70'>",
-        "8c" => "<img src='projectAssets/8_of_clubs.png' alt='8 of Clubs' width='55' height='70'>",
-        "7h" => "<img src='projectAssets/7_of_hearts.png' alt='7 of Hearts' width='55' height='70'>",
-        "7d" => "<img src='projectAssets/7_of_diamonds.png' alt='7 of Diamonds' width='55' height='70'>",
-        "7s" => "<img src='projectAssets/7_of_spades.png' alt='7 of Spades' width='55' height='70'>",
-        "7c" => "<img src='projectAssets/7_of_clubs.png' alt='7 of Clubs' width='55' height='70'>",
-        "6h" => "<img src='projectAssets/6_of_hearts.png' alt='6 of Hearts' width='55' height='70'>",
-        "6d" => "<img src='projectAssets/6_of_diamonds.png' alt='6 of Diamonds' width='55' height='70'>",
-        "6s" => "<img src='projectAssets/6_of_spades.png' alt='6 of Spades' width='55' height='70'>",
-        "6c" => "<img src='projectAssets/6_of_clubs.png' alt='6 of Clubs' width='55' height='70'>",
-        "5h" => "<img src='projectAssets/5_of_hearts.png' alt='5 of Hearts' width='55' height='70'>",
-        "5d" => "<img src='projectAssets/5_of_diamonds.png' alt='5 of Diamonds' width='55' height='70'>",
-        "5s" => "<img src='projectAssets/5_of_spades.png' alt='5 of Spades' width='55' height='70'>",
-        "5c" => "<img src='projectAssets/5_of_clubs.png' alt='5 of Clubs' width='55' height='70'>",
-        "4h" => "<img src='projectAssets/4_of_hearts.png' alt='4 of Hearts' width='55' height='70'>",
-        "4d" => "<img src='projectAssets/4_of_diamonds.png' alt='4 of Diamonds' width='55' height='70'>",
-        "4s" => "<img src='projectAssets/4_of_spades.png' alt='4 of Spades' width='55' height='70'>",
-        "4c" => "<img src='projectAssets/4_of_clubs.png' alt='4 of Clubs' width='55' height='70'>",
-        "3h" => "<img src='projectAssets/3_of_hearts.png' alt='3 of Hearts' width='55' height='70'>",
-        "3d" => "<img src='projectAssets/3_of_diamonds.png' alt='3 of Diamonds' width='55' height='70'>",
-        "3s" => "<img src='projectAssets/3_of_spades.png' alt='3 of Spades' width='55' height='70'>",
-        "3c" => "<img src='projectAssets/3_of_clubs.png' alt='3 of Clubs' width='55' height='70'>",
-        "2h" => "<img src='projectAssets/2_of_hearts.png' alt='2 of Hearts' width='55' height='70'>",
-        "2d" => "<img src='projectAssets/2_of_diamonds.png' alt='2 of Diamonds' width='55' height='70'>",
-        "2s" => "<img src='projectAssets/2_of_spades.png' alt='2 of Spades' width='55' height='70'>",
-        "2c" => "<img src='projectAssets/2_of_clubs.png' alt='2 of Clubs' width='55' height='70'>"
+        "Ah" => "<img src='../projectAssets/ace_of_hearts.png' alt='Ace of Hearts' width='55' height='70'>",
+        "Ad" => "<img src='../projectAssets/ace_of_diamonds.png' alt='Ace of Diamonds' width='55' height='70'>",
+        "As" => "<img src='../projectAssets/ace_of_spades.png' alt='Ace of Spades' width='55' height='70'>",
+        "Ac" => "<img src='../projectAssets/ace_of_clubs.png' alt='Ace of Clubs' width='55' height='70'>",
+        "Kh" => "<img src='../projectAssets/king_of_hearts.png' alt='King of Hearts' width='55' height='70'>",
+        "Kd" => "<img src='../projectAssets/king_of_diamonds.png' alt='King of Diamonds' width='55' height='70'>",
+        "Ks" => "<img src='../projectAssets/king_of_spades.png' alt='King of Spades' width='55' height='70'>",
+        "Kc" => "<img src='../projectAssets/king_of_clubs.png' alt='King of Clubs' width='55' height='70'>",
+        "Qh" => "<img src='../projectAssets/queen_of_hearts.png' alt='Queen of Hearts' width='55' height='70'>",
+        "Qd" => "<img src='../projectAssets/queen_of_diamonds.png' alt='Queen of Diamonds' width='55' height='70'>",
+        "Qs" => "<img src='../projectAssets/queen_of_spades.png' alt='Queen of Spades' width='55' height='70'>",
+        "Qc" => "<img src='../projectAssets/queen_of_clubs.png' alt='Queen of Clubs' width='55' height='70'>",
+        "Jh" => "<img src='../projectAssets/jack_of_hearts.png' alt='Jack of Hearts' width='55' height='70'>",
+        "Jd" => "<img src='../projectAssets/jack_of_diamonds.png' alt='Jack of Diamonds' width='55' height='70'>",
+        "Js" => "<img src='../projectAssets/jack_of_spades.png' alt='Jack of Spades' width='55' height='70'>",
+        "Jc" => "<img src='../projectAssets/jack_of_clubs.png' alt='Jack of Clubs' width='55' height='70'>",
+        "Th" => "<img src='../projectAssets/10_of_hearts.png' alt='10 of Hearts' width='55' height='70'>",
+        "Td" => "<img src='../projectAssets/10_of_diamonds.png' alt='10 of Diamonds' width='55' height='70'>",
+        "Ts" => "<img src='../projectAssets/10_of_spades.png' alt='10 of Spades' width='55' height='70'>",
+        "Tc" => "<img src='../projectAssets/10_of_clubs.png' alt='10 of Clubs' width='55' height='70'>",
+        "9h" => "<img src='../projectAssets/9_of_hearts.png' alt='9 of Hearts' width='55' height='70'>",
+        "9d" => "<img src='../projectAssets/9_of_diamonds.png' alt='9 of Diamonds' width='55' height='70'>",
+        "9s" => "<img src='../projectAssets/9_of_spades.png' alt='9 of Spades' width='55' height='70'>",
+        "9c" => "<img src='../projectAssets/9_of_clubs.png' alt='9 of Clubs' width='55' height='70'>",
+        "8h" => "<img src='../projectAssets/8_of_hearts.png' alt='8 of Hearts' width='55' height='70'>",
+        "8d" => "<img src='../projectAssets/8_of_diamonds.png' alt='8 of Diamonds' width='55' height='70'>",
+        "8s" => "<img src='../projectAssets/8_of_spades.png' alt='8 of Spades' width='55' height='70'>",
+        "8c" => "<img src='../projectAssets/8_of_clubs.png' alt='8 of Clubs' width='55' height='70'>",
+        "7h" => "<img src='../projectAssets/7_of_hearts.png' alt='7 of Hearts' width='55' height='70'>",
+        "7d" => "<img src='../projectAssets/7_of_diamonds.png' alt='7 of Diamonds' width='55' height='70'>",
+        "7s" => "<img src='../projectAssets/7_of_spades.png' alt='7 of Spades' width='55' height='70'>",
+        "7c" => "<img src='../projectAssets/7_of_clubs.png' alt='7 of Clubs' width='55' height='70'>",
+        "6h" => "<img src='../projectAssets/6_of_hearts.png' alt='6 of Hearts' width='55' height='70'>",
+        "6d" => "<img src='../projectAssets/6_of_diamonds.png' alt='6 of Diamonds' width='55' height='70'>",
+        "6s" => "<img src='../projectAssets/6_of_spades.png' alt='6 of Spades' width='55' height='70'>",
+        "6c" => "<img src='../projectAssets/6_of_clubs.png' alt='6 of Clubs' width='55' height='70'>",
+        "5h" => "<img src='../projectAssets/5_of_hearts.png' alt='5 of Hearts' width='55' height='70'>",
+        "5d" => "<img src='../projectAssets/5_of_diamonds.png' alt='5 of Diamonds' width='55' height='70'>",
+        "5s" => "<img src='../projectAssets/5_of_spades.png' alt='5 of Spades' width='55' height='70'>",
+        "5c" => "<img src='../projectAssets/5_of_clubs.png' alt='5 of Clubs' width='55' height='70'>",
+        "4h" => "<img src='../projectAssets/4_of_hearts.png' alt='4 of Hearts' width='55' height='70'>",
+        "4d" => "<img src='../projectAssets/4_of_diamonds.png' alt='4 of Diamonds' width='55' height='70'>",
+        "4s" => "<img src='../projectAssets/4_of_spades.png' alt='4 of Spades' width='55' height='70'>",
+        "4c" => "<img src='../projectAssets/4_of_clubs.png' alt='4 of Clubs' width='55' height='70'>",
+        "3h" => "<img src='../projectAssets/3_of_hearts.png' alt='3 of Hearts' width='55' height='70'>",
+        "3d" => "<img src='../projectAssets/3_of_diamonds.png' alt='3 of Diamonds' width='55' height='70'>",
+        "3s" => "<img src='../projectAssets/3_of_spades.png' alt='3 of Spades' width='55' height='70'>",
+        "3c" => "<img src='../projectAssets/3_of_clubs.png' alt='3 of Clubs' width='55' height='70'>",
+        "2h" => "<img src='../projectAssets/2_of_hearts.png' alt='2 of Hearts' width='55' height='70'>",
+        "2d" => "<img src='../projectAssets/2_of_diamonds.png' alt='2 of Diamonds' width='55' height='70'>",
+        "2s" => "<img src='../projectAssets/2_of_spades.png' alt='2 of Spades' width='55' height='70'>",
+        "2c" => "<img src='../projectAssets/2_of_clubs.png' alt='2 of Clubs' width='55' height='70'>"
     );
 
     private $positionDict = array(
@@ -166,6 +166,15 @@ class pokerController {
             case "testAjax":
                 $this->testAjax();
                 break;
+            case "chat":
+                $this->chat();
+                break;
+            case "submitMsg":
+                $this->submitMsg();
+                break;
+            case "fetchConvos":
+                $this->fetchConvos();
+                break;
             default:
                 $this->showWelcome();
                 break;
@@ -201,6 +210,13 @@ class pokerController {
     public function ohno() {
         // include("/students/jrk5ak/students/jrk5ak/Project/ohno.php");
         include("/opt/src/Project/ohno.php");
+    }
+
+    public function chat() {
+        // include("/students/jrk5ak/students/jrk5ak/Project/chat.php");
+        $_SESSION['friendName'] = ($_GET['friend']);
+        $this->getEmail($_SESSION["friendName"]);
+        include("/opt/src/Project/chat.php");
     }
 
     public function showWelcome(){
@@ -1207,11 +1223,14 @@ class pokerController {
                 $_POST['searchFriend'], $_SESSION['friendEmail']
                 );
 
+
+
                 header("Location: ?command=online");
             } 
             else {
                 // TODO: ADD THIS FUNCTIONALITY
                 $this->errorMessage = "Player doesn't exist.";
+                header("Location: ?command=online");
             }
         }
 
@@ -1223,6 +1242,30 @@ class pokerController {
 
     public function testAjax() {
         include("/opt/src/Project/testAjax.php");
+    }
+
+    public function submitMsg() {
+
+        $this->getEmail($_SESSION["friendName"]);
+        $this->db->query("INSERT INTO msgs (sendname, sendemail, recieveName, recieveEmail, msg) values ($1, $2, $3, $4, $5);",
+        $_SESSION["name"], $_SESSION["email"],
+        $_SESSION["friendName"], $_SESSION["friendEmail"],
+        file_get_contents('php://input')
+        );
+    }
+
+    public function fetchConvos() {
+
+        $res = $this->db->query("SELECT * FROM msgs WHERE sendName = $1 AND sendEmail = $2;",  $_SESSION["name"], $_SESSION["email"]);
+        if (!isset($res)) {
+            die("No questions in the database");
+        }
+        $question = (($res));
+        
+        // Return JSON only
+        header("Content-type: application/json");
+        echo json_encode($question);
+        
     }
 
     public function logout(){
