@@ -24,7 +24,9 @@
     $res  = pg_query($dbHandle, "drop table if exists users;");
     $res  = pg_query($dbHandle, "drop table if exists hands;");
     $res  = pg_query($dbHandle, "drop table if exists friends;");
+    $res  = pg_query($dbHandle, "drop table if exists msgs;");
     $res  = pg_query($dbHandle, "create sequence user_seq;");
+    
 
     $res  = pg_query($dbHandle, "create table users (
         id  int primary key default nextval('user_seq'),
@@ -44,3 +46,11 @@
         email text,
         friendName text,
         friendEmail text);");
+
+    $res  = pg_query($dbHandle, "create table msgs(
+        id  int primary key default nextval('user_seq'),
+        sendName text,
+        sendEmail text,
+        recieveName text,
+        recieveEmail text,
+        msg text);");

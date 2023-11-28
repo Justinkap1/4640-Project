@@ -80,19 +80,21 @@
                     </form>
 
                     <?php
-                    // Check if friends data is set in the session
-                    if (isset($_SESSION['friends'])) {
-                        // Loop through each friend in the 2D array
-                        foreach ($_SESSION['friends'] as $friend) {
-                            $friendName = $friend['friendname'];
-                            $friendEmail = $friend['friendemail'];
+                        // Check if friends data is set in the session
+                        if (isset($_SESSION['friends'])) {
+                            // Loop through each friend in the 2D array
+                            foreach ($_SESSION['friends'] as $friend) {
+                                $friendName = $friend['friendname'];
+                                $friendEmail = $friend['friendemail'];
                     ?>
-                            <div class="friend-item">
-                                <div class="add-friend">+</div>
-                                <span class="friend-name"><?php echo $friendName; ?></span>
-                                <!-- Displaying friend email is optional -->
-                                <!-- <span class="friend-email"><?php echo $friendEmail; ?></span> -->
-                            </div>
+                                <div class="friend-item">
+                                    <a href="?command=chat&friend=<?php echo urlencode($friendName); ?>">
+                                        <div class="add-friend">+</div>
+                                    </a>
+                                    <span class="friend-name"><?php echo $friendName; ?></span>
+                                    <!-- Displaying friend email is optional -->
+                                    <!-- <span class="friend-email"><?php echo $friendEmail; ?></span> -->
+                                </div>
                     <?php
                         }
                     }
