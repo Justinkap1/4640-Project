@@ -11,46 +11,45 @@
     <title>Bootstrap Starter HTML</title>  
 </head>
 
-
 <body>
     <!-- Nav Bar -->
     <div class="navbar">
         <a href="?command=homePage" class="nav-item">
-            <img src="/assets/pokerchip.jpg" alt="chip">
+            <img src="/projectAssets/pokerchip.jpg" alt="chip">
             <div class="text-container">Home</div>
         </a>
         <a href="?command=alone" class="nav-item">
-            <img src="/assets/pokerchip.jpg" alt="chip">
+            <img src="/projectAssets/pokerchip.jpg" alt="chip">
             <div class="text-container">Play Online</div>
         </a>
         <a href="?command=handhistories" class="nav-item">
-            <img src="/assets/pokerchip.jpg" alt="chip">
+            <img src="/projectAssets/pokerchip.jpg" alt="chip">
             <div class="text-container">Hand History</div>
         </a>
         <a href="?command=articles" class="nav-item">
-            <img src="/assets/pokerchip.jpg" alt="chip">
+            <img src="/projectAssets/pokerchip.jpg" alt="chip">
             <div class="text-container">Articles</div>
         </a> 
     </div>
 
-<!-- Computer Dificulty section -->
+    <!-- Computer Difficulty section -->
     <div style="text-align:center;">
         <div>
-            <h1 style="color:white"> Choose a Computer Dificulty </h1>
+            <h1 style="color:white"> Choose a Computer Difficulty </h1>
         </div>
 
         <div style="display: flex; justify-content:center; align-items:center; height: 80vh;">
             <easy>
                 <div class="poker-chip">
-                    <img src="/assets/chippy.png" alt="chip">
+                    <img src="/projectAssets/chippy.png" alt="chip">
                 </div>
                 <h2 style="color:white">
                     Easy
                 </h2>
             </easy>
-            <medium >
+            <medium>
                 <div class="poker-chip">
-                    <img src="/assets/agent-chess.png" alt="chip">
+                    <img src="/projectAssets/agent-chess.png" alt="chip">
                 </div>
                 <h2 style="color:white">
                     Medium
@@ -58,7 +57,7 @@
             </medium>
             <hard>
                 <div class="poker-chip">
-                    <img src="/assets/skyweb.png" alt="chip">
+                    <img src="/projectAssets/skyweb.png" alt="chip">
                 </div>
                 <h2 style="color:white">
                     Hard
@@ -67,27 +66,84 @@
         </div>
     </div>
 
-
-
+    <!-- Bootstrap Modal for Buy-in Form -->
+    <div class="modal fade" id="buyInModal" tabindex="-1" role="dialog" aria-labelledby="buyInModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="buyInModalLabel">Enter Buy-in Amount</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="buyInForm" onsubmit="submitForm(); return false;">
+                    <!-- Use pattern attribute to accept positive whole numbers only -->
+                    <input type="text" pattern="^[1-9]\d*$" placeholder="Enter Buy-in Amount" required id="buyInAmount" title="Enter a positive whole number">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
 
     <footer class="main-footer" id="main-foot">
         <ul class="links">
-            <li><img src="/assets/twitter.png" alt="twitter"></li>
-            <li><img src="/assets/discord.png" alt="discord"></li>
-            <li><img src="/assets/instagram.png" alt="instagram"></li>
+            <li><img src="/projectAssets/twitter.png" alt="twitter"></li>
+            <li><img src="/projectAssets/discord.png" alt="discord"></li>
+            <li><img src="/projectAssets/instagram.png" alt="instagram"></li>
         </ul>
         <ul class="pfp-footer">
-            <li style="list-style: none;"><img src="/assets/pfp.jpg" alt="profile"></li>
+            <li style="list-style: none;"><img src="/projectAssets/pfp.jpg" alt="profile"></li>
         </ul>
 
         <small>Copyright Justin Kaplan and Mihir Sangameswar 2023</small>
-
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/less" ></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/less"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- Add a script tag at the end of your body to include JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to show the buy-in form in the modal
+            function showBuyInForm(difficulty) {
+                // Display the Bootstrap modal for the buy-in form
+                var buyInModal = new bootstrap.Modal(document.getElementById('buyInModal'));
+                buyInModal.show();
+
+                // Set the data-difficulty attribute in the modal for reference when submitting
+                document.getElementById('buyInForm').setAttribute('data-difficulty', difficulty);
+            }
+
+            // Function to handle form submission
+            window.submitForm = function () {
+                var buyInAmount = document.getElementById('buyInAmount').value;
+                var difficulty = document.getElementById('buyInForm').getAttribute('data-difficulty');
+                
+                // You can now handle the buy-in amount and difficulty as needed
+                console.log('Buy-in Amount:', buyInAmount);
+                console.log('Difficulty:', difficulty);
+
+                // Set the href attribute with the selected difficulty
+                window.location.href = '?command=startGame&difficulty=' + difficulty+'&buyIn=' + buyInAmount;
+
+                // Close the modal after submission
+                var buyInModal = new bootstrap.Modal(document.getElementById('buyInModal'));
+                buyInModal.hide();
+            };
+
+            // Add click event listeners to difficulty elements
+            document.querySelector('easy').addEventListener('click', function () {
+                showBuyInForm('easy');
+            });
+
+            document.querySelector('medium').addEventListener('click', function () {
+                showBuyInForm('medium');
+            });
+
+            document.querySelector('hard').addEventListener('click', function () {
+                showBuyInForm('hard');
+            });
+        });
+    </script>
 </body>
-
-
-
-
 </html>

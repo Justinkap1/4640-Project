@@ -8,47 +8,82 @@
     <link rel="stylesheet" href="../styles/main.css"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"  crossorigin="anonymous"> 
     
+    <script>
+
+        var myName = <?php echo json_encode($_SESSION['name']); ?>;
+    </script>
     <style>
-        /* Additional styling for the texting interface */
-        .messaging-container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+    /* Additional styling for the texting interface */
+    .messaging-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        height: 400px; /* Set a fixed height for the container */
+        overflow-y: auto; /* Enable vertical scrolling */
+        position: relative;
+    }
 
-        .message-input {
-            width: 80%;
-            padding: 8px;
-            margin-right: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
+    .message-input {
+        width: 80%;
+        padding: 8px;
+        margin-right: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
 
-        .send-button {
-            padding: 8px 12px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    .send-button {
+        padding: 8px 12px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 
-        .conversation {
-            margin-top: 20px;
-        }
+    .conversation {
+        max-height: calc(100% - 50px); /* Set max height, considering the height of the form */
+        overflow-y: auto;
+        margin-top: 20px;
+    }
 
-        .message {
-            background-color: #f1f1f1;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-    </style>
+    .message {
+        background-color: #f1f1f1;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+
+    /* Styling for the fixed message form */
+    #messageForm {
+        position: sticky;
+        bottom: 0;
+        background-color: white; /* Add background color to prevent overlap with conversation container */
+        padding: 10px;
+        box-shadow: 0px -5px 5px rgba(0, 0, 0, 0.1); /* Add shadow for separation effect */
+    }
+
+    #messageForm input,
+    #messageForm button {
+        margin: 0;
+    }
+
+    .chatting-with {
+        text-align: center;
+        font-size: 24px;
+        color: white;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+</style>
 
 
+
+
+        <!-- <?php 
+        echo $_SESSION['name'];
+        echo $_SESSION['email'];
+        print_r($_SESSION['checkDB']);
+        ?> -->
 
 
     <title>Bootstrap Starter HTML</title>  
@@ -73,8 +108,12 @@
             <div class="text-container">Articles</div>
         </a> 
     </div>
-
     <div class="messaging-container">
+
+    <div class="chatting-with">
+        Chatting with <?php echo htmlspecialchars($_GET['friend']); ?>
+    </div>
+
         <div class="conversation" id="conversation">
             <!-- Messages will be displayed here -->
         </div>
@@ -88,9 +127,9 @@
     <?php
 
     $_SESSION['friendName'] = ($_GET['friend']);
-    echo $_SESSION['friendName'];
-    echo gettype($_SESSION['friendName']);
-    echo $_SESSION['friendEmail'];
+    // echo $_SESSION['friendName'];
+    // echo gettype($_SESSION['friendName']);
+    // echo $_SESSION['friendEmail'];
     ?>
 
     <footer class="main-footer" id="main-foot">
@@ -111,10 +150,10 @@
    
     <script>
         // JavaScript for the messaging interface
-        function sendMessage() {
-            var messageInput = document.getElementById("messageInput").value;
+        const sendMessage = () => {
+            let messageInput = document.getElementById("messageInput").value;
             if (messageInput.trim() !== "") {
-                var messageObject = {
+                let messageObject = {
                     type: "text",
                     content: messageInput,
                     timestamp: new Date().toISOString()
@@ -125,14 +164,15 @@
                 // Create a new function for the AJAX request to avoid recursion
                 sendAjaxRequest(messageObject);
 
-                var conversation = document.getElementById("conversation");
-                var messageElement = document.createElement("div");
+                let conversation = document.getElementById("conversation");
+                let messageElement = document.createElement("div");
                 messageElement.className = "message";
-                messageElement.textContent = messageInput;
+                messageElement.textContent = myName + ": " + messageInput;
                 conversation.appendChild(messageElement);
                 document.getElementById("messageInput").value = "";
             }
-        }
+        };
+
 
         function sendAjaxRequest(messageObject) {
             // Instantiate the object and open the AJAX request to our backend
@@ -154,57 +194,62 @@
         }
 
         function fetchConvos() {
-    // Instantiate the object and open the AJAX request to our backend
-    var ajax = new XMLHttpRequest();
-    ajax.open("GET", "?command=fetchConvos", true);
-    // (Note: we're expecting JSON in return)
-    ajax.responseType = "json";
-    // Send the request
-    ajax.send(null);
+            // Instantiate the object and open the AJAX request to our backend
+            var ajax = new XMLHttpRequest();
+            ajax.open("GET", "?command=fetchConvos", true);
+            // (Note: we're expecting JSON in return)
+            ajax.responseType = "json";
+            // Send the request
+            ajax.send(null);
 
-    // Event Listener for when the AJAX request loads
-    ajax.addEventListener("load", function () {
-        // display the question
-        if (this.status == 200) {
-            var messages = this.response;
-            console.log(messages);
+            // Event Listener for when the AJAX request loads
+            ajax.addEventListener("load", function () {
+                // display the question
+                if (this.status == 200) {
+                    var messages = this.response;
+                    console.log(messages);
 
-            // Process the messages and update the conversation
-            updateConversation(messages);
-        } else {
-            // Error message
-            console.log("Error fetching conversation");
+                    // Process the messages and update the conversation
+                    updateConversation(messages);
+                } else {
+                    // Error message
+                    console.log("Error fetching conversation");
+                }
+            });
+
+            // Event Listener for when the AJAX request errors out
+            ajax.addEventListener("error", function () {
+                // Error message
+                console.log("Error fetching conversation");
+            });
         }
-    });
-
-    // Event Listener for when the AJAX request errors out
-    ajax.addEventListener("error", function () {
-        // Error message
-        console.log("Error fetching conversation");
-    });
-}
 
 // Function to update the conversation with new messages
 function updateConversation(messages) {
-    var conversation = document.getElementById("conversation");
+        var conversation = document.getElementById("conversation");
 
-    // Clear existing messages
-    conversation.innerHTML = "";
+        // Check if there are messages
+        if (messages && messages.length > 0) {
+            // Iterate over the messages and append them to the conversation
+            messages.forEach(function (message) {
+                var messageContent = JSON.parse(message.msg).content; // Extract content from the JSON message
+                var senderName = message.sendname;
 
-    // Check if there are messages
-    if (messages && messages.length > 0) {
-        // Iterate over the messages and append them to the conversation
-        messages.forEach(function (message) {
-            var messageContent = JSON.parse(message.msg).content; // Extract content from the JSON message
-            var senderName = message.sendname;
+                var messageElement = document.createElement("div");
+                messageElement.className = "message";
+                messageElement.textContent = `${senderName}: ${messageContent}`;
+                conversation.appendChild(messageElement);
+            });
 
-            var messageElement = document.createElement("div");
-            messageElement.className = "message";
-            messageElement.textContent = `${senderName}: ${messageContent}`;
-            conversation.appendChild(messageElement);
-        });
+            // Scroll to the bottom of the conversation
+            conversation.scrollTop = conversation.scrollHeight;
+        }
     }
-}
+
+// code to run this every x milliseconds
+// setInterval(function () {
+//         fetchConvos();
+//     }, 3000);
 
 
 

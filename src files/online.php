@@ -33,41 +33,6 @@
 <!-- Game Choosers -->
     <h1 class="page-title">Game Info</h1>
     <div class="online-container">
-            <div style="margin-right: 50px;">
-                    <form class="d-flex" role="search" id="searchBar">
-                        <input class="form-control me-2" type="search" placeholder="Buy in" aria-label="Search" 
-                            pattern="^[1-9]\d*$" title="Please enter a positive whole number">
-                        <div style="background-color: white; border-radius: 7px;">
-                            <button class="btn btn-outline-success" type="submit">Submit</button>
-                        </div>
-                    </form>
-                
-                <h2 style="color:white">Choose a Game Mode</h2>
-            
-                <form>
-                    <label style="color:white">
-                        <input type="radio" name="gameMode" value="Pot Limit Omaha">
-                        Pot Limit Omaha
-                    </label>
-            
-                    <br>
-            
-                    <label style="color:white">
-                        <input type="radio" name="gameMode" value="No Limit Texas Holdem">
-                        No Limit Texas Holdem
-                    </label>
-            
-                    <br>
-            
-                    <label style="color:white">
-                        <input type="radio" name="gameMode" value="Limit Texas Holdem">
-                        Limit Texas Holdem
-                    </label>
-            
-                    <br>
-                    <input type="submit" value="Submit">
-                </form>
-            </div>
             <!-- Friends List -->
             <div>
                 <h3 style="text-align: center; color: white;"> Friends </h3>

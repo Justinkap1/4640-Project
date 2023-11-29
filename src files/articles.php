@@ -18,12 +18,12 @@
         }
 
         .news-results h2 {
-            color: #343a40;
+            color: #ffffff;
             margin-bottom: 5px;
         }
 
         .news-results p {
-            color: #6c757d;
+            color: #f5f5f5;
             margin-bottom: 10px;
         }
 
@@ -77,15 +77,16 @@
     <script>
         function searchNewsDefault() {
             const apiKey = 'ccab0c64b2a04a2fb240828366a80f69'; // Replace with your actual News API key
-            const defaultQuery = 'poker'; // Set the default search query
+            const defaultQuery = '+poker'; // Set the default search query
             const apiUrl = 'https://newsapi.org/v2/everything';
             const apiKeyParam = 'apiKey=' + apiKey;
             const queryParam = 'q=' + encodeURIComponent(defaultQuery);
             const sortBy = 'sortBy=relevancy';
             const pageSize = 'pageSize=10';
-            const content ='content=poker';
-            const description = 'description=poker';
-            const url = `${apiUrl}?${apiKeyParam}&${sortBy}&${pageSize}&${content}&${description}&${queryParam}`;
+            const content ='searchIn=title';
+            const language = 'language=en';
+            const url = `${apiUrl}?${apiKeyParam}&${sortBy}&${pageSize}&${content}&${language}&${queryParam}`;
+            console.log(url);
 
             const xhr = new XMLHttpRequest();
             xhr.open('GET', url, true);
