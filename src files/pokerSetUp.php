@@ -3,19 +3,24 @@
     $myCards = $_SESSION['myCards'];
     $botCards = $_SESSION['botCards'];
     $communityCards = $_SESSION['communityCards'];
-    // $_SESSION['count'] = 0;
 ?>
 
 <!-- store all cards -->
+
 <script>
+    var botMoves = "check";
     var botCards = <?php echo json_encode($botCards); ?>;
     var myCards = <?php echo json_encode($myCards); ?>;
     var communityCards = <?php echo json_encode($communityCards); ?>;
+    var backCards = ['backCard1','backCard2'];
+    console.log(communityCards);
 
-    var backCards = <?php echo json_encode(array(
+    var backCardsDict = <?php echo json_encode(array(
         "backCard1" => "../projectAssets/backOfCard.png",
         "backCard2" => "../projectAssets/backOfCard.png",
     )); ?>;
+
+    console.log(backCards);
     var masterCardDict = <?php echo json_encode(array(
         "Ah" => "../projectAssets/ace_of_hearts.png",
         "Ad" => "../projectAssets/ace_of_diamonds.png",
@@ -83,6 +88,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"  crossorigin="anonymous"> 
     
     <title>Bootstrap Starter HTML</title>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js" integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
@@ -135,6 +141,22 @@
             <button type="button" class="btn btn-secondary" onclick="goHome()">Go Home</button>
         </form>
 
+        <!-- JQUERY FOR REQS -->
+        <script>
+        $(document).ready(function() {
+            $("#newGameForm button").hover(
+                function() {
+                    $(this).css({
+                        "transform": "scale(1.1)",
+                        "transition": "transform 0.3s ease-in-out"
+                    });
+                },
+                function() {
+                    $(this).css("transform", "scale(1)");
+                }
+            );
+        });
+        </script>
 
     </div>
 
@@ -155,6 +177,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script>
     var count = <?php echo $_SESSION['count'] ?? 0; ?>;
+
+    // Call the displayCards function for myCards, botCards, and communityCards
+    displayCards(myCards, "myCardsContainer");
+    displayBotCards(botCards, "botCardsContainer");
+    displayCommunityCards(communityCards, "communityCardsContainer");
 
     function displayCommunityCards(cards, containerId) {
         var container = document.getElementById(containerId);
@@ -193,23 +220,21 @@
         // Clear the container first
         container.innerHTML = "";
 
-        if (count === 5) {
-            cards = botCards;
-        }
-        else {
-            cards = backCards;
-        }
+        // Choose which set of cards to display based on the count
+        var cardsToDisplay = (count === 3) ? botCards : backCards;
 
         // Map card values to images and append to the container
-        cards.forEach(function (card) {
+        cardsToDisplay.forEach(function (card) {
             var img = document.createElement("img");
-            img.src = masterCardDict[card];
+            img.src = (count === 3) ? masterCardDict[card] : backCardsDict[card];
             img.alt = card;
             img.width = 55;
             img.height = 70;
             container.appendChild(img);
         });
-    }
+        }
+
+
 
 
     function displayCards(cards, containerId) {
@@ -229,11 +254,6 @@
         });
     }
 
-    // Call the displayCards function for myCards, botCards, and communityCards
-    displayCards(myCards, "myCardsContainer");
-    displayCards(botCards, "botCardsContainer");
-    displayCommunityCards(communityCards, "communityCardsContainer");
-
     function getPokerOdds() {
         return 30;
     }
@@ -250,25 +270,14 @@
     }
 
     function nextPart() {
-        botOdds = getPokerOdds();
-        var difficulty = currentDifficulty();
-
-        if (difficulty == "easy") {
-            console.log("70%");
-        } else if (difficulty == "medium") {
-            console.log("50%");
-        } else if (difficulty == "easy") {
-            console.log("30%");
-        }
-        count += 1;
-        updateCount(count);
+        botAction();
 
         //this reloads the whole page. change this so it goes faster in the future
         displayCommunityCards(communityCards, "communityCardsContainer");
 
     }
 
-    function updateCount(count) {
+        function updateCount(count) {
             // Instantiate the object and open the AJAX request to our backend
             var ajax = new XMLHttpRequest();
             ajax.open("POST", "?command=updateCount", true);
@@ -291,26 +300,80 @@
 
 
         function confirmFold() {
-        var isConfirmed = window.confirm("Are you sure you want to fold?"); // Show a confirmation dialog
+            var isConfirmed = window.confirm("Are you sure you want to fold?"); // Show a confirmation dialog
 
-        if (isConfirmed) {
-            // Display the new game or go home form
-            updateCount(5);
-            displayCommunityCards(communityCards, "communityCardsContainer");
-            document.getElementById("newGameForm").style.display = "block";
+            if (isConfirmed) {
+                // Display the new game or go home form
+                updateCount(3);
+                displayCommunityCards(communityCards, "communityCardsContainer");
+                document.getElementById("newGameForm").style.display = "block";
+            }
         }
-    }
 
-        function startNewGame() {
+    function startNewGame() {
         // Add logic to start a new game here
         alert("Starting a new game!"); // You can replace this with your actual logic
+
+        window.location.href = '?command=alone';
         }
 
-        function goHome() {
+    function goHome() {
         // Add logic to go home here
         alert("Going home!"); // You can replace this with your actual logic
         window.location.href = '?command=homePage';
         }
+    
+    
+    function botAction() {
+        botChances = getBotChances();
+        var difficulty = currentDifficulty();
+        if (difficulty == "easy") {
+            if (botChances >= 70) {
+                botMove =  "check";
+            }
+            else {
+                botMove = "fold"
+            }
+        } else if (difficulty == "medium") {
+            if (botChances >= 50) {
+                botMove =  "check";
+            }
+            else {
+                botMove = "fold"
+            }
+        } else if (difficulty == "hard") {  // <-- Corrected the condition to "hard"
+            if (botChances >= 30) {
+                botMove =  "check";
+            }
+            else {
+                botMove = "fold"
+            }
+        }
+        if(botMove === "fold") {
+            updateCount(3);
+            alert("The bot folded, you win!");
+            document.getElementById("newGameForm").style.display = "block";
+        }
+        else if (count === 3) {
+            whoWon();
+        }
+        else if(botMove === "check") {
+            count += 1;
+            updateCount(count);
+        }
+    }
+
+
+    function getBotChances() {
+        return 50;
+    }
+
+    function whoWon() {
+        winner = ""
+        return (winner + " wins!");
+    }
+
+
 
 
 </script>

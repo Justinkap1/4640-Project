@@ -66,7 +66,6 @@
         </div>
     </div>
 
-    <!-- Bootstrap Modal for Buy-in Form -->
     <div class="modal fade" id="buyInModal" tabindex="-1" role="dialog" aria-labelledby="buyInModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -101,45 +100,31 @@
     <script src="https://cdn.jsdelivr.net/npm/less"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
-    <!-- Add a script tag at the end of your body to include JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Function to show the buy-in form in the modal
             function showBuyInForm(difficulty) {
-                // Display the Bootstrap modal for the buy-in form
                 var buyInModal = new bootstrap.Modal(document.getElementById('buyInModal'));
                 buyInModal.show();
-
-                // Set the data-difficulty attribute in the modal for reference when submitting
                 document.getElementById('buyInForm').setAttribute('data-difficulty', difficulty);
             }
 
-            // Function to handle form submission
             window.submitForm = function () {
                 var buyInAmount = document.getElementById('buyInAmount').value;
                 var difficulty = document.getElementById('buyInForm').getAttribute('data-difficulty');
-                
-                // You can now handle the buy-in amount and difficulty as needed
+
                 console.log('Buy-in Amount:', buyInAmount);
                 console.log('Difficulty:', difficulty);
-
-                // Set the href attribute with the selected difficulty
                 window.location.href = '?command=startGame&difficulty=' + difficulty+'&buyIn=' + buyInAmount;
 
-                // Close the modal after submission
                 var buyInModal = new bootstrap.Modal(document.getElementById('buyInModal'));
                 buyInModal.hide();
             };
-
-            // Add click event listeners to difficulty elements
             document.querySelector('easy').addEventListener('click', function () {
                 showBuyInForm('easy');
             });
-
             document.querySelector('medium').addEventListener('click', function () {
                 showBuyInForm('medium');
             });
-
             document.querySelector('hard').addEventListener('click', function () {
                 showBuyInForm('hard');
             });

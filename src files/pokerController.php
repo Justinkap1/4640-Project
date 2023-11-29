@@ -185,9 +185,13 @@ class pokerController {
             case "updateCount":
                 $this->updateCount();
                 break;
+            case "calculator":
+                $this->calculator();
+                break;
             default:
                 $this->showWelcome();
                 break;
+
         }
     }
 
@@ -1136,32 +1140,1543 @@ class pokerController {
     }
 
     public function addFlop(){
-        $_SESSION['flopFirstAction'] = $_POST['flopAction'];
-        $_SESSION['flopSecondAction'] = $_POST['flopAction2'];
-        $_SESSION['flopThirdAction'] = $_POST['flopAction3'];
-        $_SESSION['flopFourthAction'] = $_POST['flopAction4'];
+        $flopFirstAction = $_POST['flopAction'];
+        $flopSecondAction = $_POST['flopAction2'];
+        $flopThirdAction = $_POST['flopAction3'];
+        $flopFourthAction = $_POST['flopAction4'];
 
-        $_SESSION['flopMessage'] = "
-        $_SESSION[flopFirstAction]
-        <br>
-        $_SESSION[flopSecondAction]
-        ";
+        $flopFirstBet = $_POST['betAmountFlop'];
+        $flopSecondBet = $_POST['betAmountFlop2'];
+        $flopThirdBet = $_POST['betAmountFlop3'];
+        $flopFourthBet = $_POST['betAmountFlop4'];
+
+        $flopCards = $_POST['flopCards'];
+        $_SESSION['flopCardsSplit'] = explode(",", $flopCards);
+        $_SESSION['firstFlopCard'] = $this->cardDict[$_SESSION['flopCardsSplit'][0]];
+        $_SESSION['secondFlopCard'] = $this->cardDict[$_SESSION['flopCardsSplit'][1]];
+        $_SESSION['thirdFlopCard'] = $this->cardDict[$_SESSION['flopCardsSplit'][2]];
+
+        $_SESSION['flopcards'] = "Flop: $_SESSION[firstFlopCard] $_SESSION[secondFlopCard] $_SESSION[thirdFlopCard]";
+
+        if ($this->postFlopPositionDict[$_SESSION['hPosition']] < $this->postFlopPositionDict[$_SESSION['vPosition']]){
+            $heroPostFirst = true;
+        }
+        else{
+            $heroPostFirst = false;
+        }
+
+        if ($heroPostFirst === true){
+            if ($flopFirstBet > $_SESSION['hero_stack'] || $flopSecondBet > $_SESSION['villain_stack'] || $flopThirdBet > $_SESSION['hero_stack'] || $flopFourthBet> $_SESSION['villain_stack']){
+                $_SESSION['flopActionMessage'] = "You cannot check bet/raise more than you have!";
+                $this->showAddHand();
+                exit();
+            }
+            if ($flopFirstAction === "bet"){
+                if ($flopSecondAction === "call"){
+                    $_SESSION['flopActionMessage'] = "
+                    <div class='flopAction'>
+                        Hero ($_SESSION[hPosition]): bets $flopFirstBet
+                        <br>
+                        Villain ($_SESSION[vPosition]): calls
+                    </div>
+                    ";
+                    $_SESSION['hero_stack'] -= $flopFirstBet;
+                    $_SESSION['villain_stack'] -= $flopFirstBet;
+                    $_SESSION['preflopMessage'] = "
+                    <div class='stacks'>
+                        <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                        <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                        <span>Blinds: $_SESSION[blinds]</span>
+                    </div>
+                    <br>
+                    $_SESSION[currentHands]
+                    ";
+                }
+                if ($flopSecondAction === "fold"){
+                    $_SESSION['flopActionMessage'] = "
+                    <div class='flopAction'>
+                        Hero ($_SESSION[hPosition]): bets $flopFirstBet
+                        <br>
+                        Villain ($_SESSION[vPosition]): folds
+                        <br>
+                        Hero wins
+                    </div>
+                    ";
+                }
+                if ($flopSecondAction === "check"){
+                    $_SESSION['flopActionMessage'] = "You cannot check when someone has bet!";
+                }
+                if ($flopSecondAction === "bet"){
+                    $_SESSION['flopActionMessage'] = "It has to be a raise after someone has bet!";
+                }
+                if ($flopSecondAction === "raise"){
+                    if ($flopThirdAction === "call"){
+                        $_SESSION['flopActionMessage'] = "
+                        <div class='flopAction'>
+                            Hero ($_SESSION[hPosition]): bets $flopFirstBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): raises to $flopSecondBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): calls
+                        </div>
+                        ";
+                        $_SESSION['hero_stack'] -= $flopSecondBet;
+                        $_SESSION['villain_stack'] -= $flopSecondBet;
+                        $_SESSION['preflopMessage'] = "
+                        <div class='stacks'>
+                            <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                            <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                            <span>Blinds: $_SESSION[blinds]</span>
+                        </div>
+                        <br>
+                        $_SESSION[currentHands]
+                        ";
+                    }
+                    if ($flopThirdAction === "fold"){
+                        $_SESSION['flopActionMessage'] = "
+                        <div class='flopAction'>
+                            Hero ($_SESSION[hPosition]): bets $flopFirstBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): raises to $flopSecondBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): folds
+                            <br>
+                            Villain wins
+                        </div>
+                        ";
+                    }
+                    if ($flopThirdAction === "check"){
+                        $_SESSION['flopActionMessage'] = "You cannot check when someone has raised!";
+                    }
+                    if ($flopThirdAction === "bet"){
+                        $_SESSION['flopActionMessage'] = "It has to be a raise after someone has bet!";
+                    }
+                    if ($flopThirdAction === "raise"){
+                        if ($flopFourthAction === "call"){
+                            $_SESSION['flopActionMessage'] = "
+                            <div class='flopAction'>
+                                Hero ($_SESSION[hPosition]): bets $flopFirstBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): raises to $flopSecondBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): raises to $flopThirdBet
+                                <br>
+                                Villain calls $flopThirdBet
+                            </div>
+                            ";
+                            $_SESSION['hero_stack'] -= $flopThirdBet;
+                            $_SESSION['villain_stack'] -= $flopThirdBet;
+                            $_SESSION['preflopMessage'] = "
+                            <div class='stacks'>
+                                <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                                <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                                <span>Blinds: $_SESSION[blinds]</span>
+                            </div>
+                            <br>
+                            $_SESSION[currentHands]
+                            ";
+                        }
+                        if ($flopFourthAction === "fold"){
+                            $_SESSION['flopActionMessage'] = "
+                            <div class='flopAction'>
+                                Hero ($_SESSION[hPosition]): bets $flopFirstBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): raises to $flopSecondBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): raises to $flopThirdBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): folds
+                                <br>
+                                Hero wins
+                            </div>
+                            ";
+                        }
+                        if ($flopFrouthAction === "bet"){
+                            $_SESSION['flopActionMessage'] = "It has to be a raise after someone has bet!";
+                        }
+                        if ($flopFrouthAction === "check"){
+                            $_SESSION['flopActionMessage'] = "You cannot check when someone has raised!";
+                        }
+                        if ($flopFrouthAction === "raise"){
+                            $_SESSION['flopActionMessage'] = "We only support 4 actions at this moment.";
+                        }
+                    }
+                }
+            }
+            if ($flopFirstAction === "check"){
+                if ($flopSecondAction === "check"){
+                    $_SESSION['flopActionMessage'] = "
+                    <div class='flopAction'>
+                        Hero ($_SESSION[hPosition]): checks
+                        <br>
+                        Villain ($_SESSION[vPosition]): checks
+                    </div>
+                    ";
+                }
+                if ($flopSecondAction === "bet"){
+                    if ($flopThirdAction === "fold"){
+                        $_SESSION['flopActionMessage'] = "
+                        <div class='flopAction'>
+                            Hero ($_SESSION[hPosition]): checks
+                            <br>
+                            Villain ($_SESSION[vPosition]): bets $flopSecondBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): folds
+                        </div>
+                    ";
+                    }
+                    if ($flopThirdAction === "check"){
+                        $_SESSION['flopActionMessage'] = "
+                        You cannot check if someone has bet!
+                        ";
+                    }
+                    if ($flopThirdAction === "bet"){
+                        $_SESSION['flopActionMessage'] = "
+                        You cannot bet after someone has bet!
+                        ";
+                    }
+                    if ($flopThirdAction === "call"){
+                        $_SESSION['flopActionMessage'] = "
+                        <div class='flopAction'>
+                            Hero ($_SESSION[hPosition]): checks
+                            <br>
+                            Villain ($_SESSION[vPosition]): bets $flopSecondBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): calls $flopSecondBet
+                        </div>
+                        ";
+                        $_SESSION['hero_stack'] -= $flopSecondBet;
+                        $_SESSION['villain_stack'] -= $flopSecondBet;
+                        $_SESSION['preflopMessage'] = "
+                        <div class='stacks'>
+                            <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                            <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                            <span>Blinds: $_SESSION[blinds]</span>
+                        </div>
+                        <br>
+                        $_SESSION[currentHands]
+                        ";
+                    }
+                    if ($flopThirdAction === "raise"){
+                        if ($flopFourthAction === "call"){
+                            $_SESSION['flopActionMessage'] = "
+                                <div class='flopAction'>
+                                Hero ($_SESSION[hPosition]): checks
+                                <br>
+                                Villain ($_SESSION[vPosition]): bets $flopSecondBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): raises to $flopThirdBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): calls
+                            </div>
+                            ";
+                            $_SESSION['hero_stack'] -= $flopThirdBet;
+                            $_SESSION['villain_stack'] -= $flopThirdBet;
+                            $_SESSION['preflopMessage'] = "
+                            <div class='stacks'>
+                                <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                                <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                                <span>Blinds: $_SESSION[blinds]</span>
+                            </div>
+                            <br>
+                            $_SESSION[currentHands]
+                            ";
+                        }
+                        if ($flopFourthAction === "fold"){
+                            $_SESSION['flopActionMessage'] = "
+                                <div class='flopAction'>
+                                Hero ($_SESSION[hPosition]): checks
+                                <br>
+                                Villain ($_SESSION[vPosition]): bets $flopSecondBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): raises to $flopThirdBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): folds
+                                <br>
+                                Hero wins
+                            </div>
+                            ";
+                        }
+                        if ($flopFourthAction === "raise"){
+                            $_SESSION['flopActionMessage'] = "We only support 4 actions at this moment.";
+                        }
+                    }
+                }
+            }
+        }
+        if ($heroPostFirst === false){
+            if ($flopFirstBet > $_SESSION['hero_stack'] || $flopSecondBet > $_SESSION['villain_stack'] || $flopThirdBet > $_SESSION['hero_stack'] || $flopFourthBet> $_SESSION['villain_stack']){
+                $_SESSION['flopActionMessage'] = "You cannot check bet/raise more than you have!";
+                $this->showAddHand();
+                exit();
+            }
+            if ($flopFirstAction === "bet"){
+                if ($flopSecondAction === "call"){
+                    $_SESSION['flopActionMessage'] = "
+                    <div class='flopAction'>
+                        Villain ($_SESSION[vPosition]): bets $flopFirstBet
+                        <br>
+                        Hero ($_SESSION[hPosition]): calls
+                    </div>
+                    ";
+                    $_SESSION['hero_stack'] -= $flopFirstBet;
+                    $_SESSION['villain_stack'] -= $flopFirstBet;
+                    $_SESSION['preflopMessage'] = "
+                    <div class='stacks'>
+                        <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                        <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                        <span>Blinds: $_SESSION[blinds]</span>
+                    </div>
+                    <br>
+                    $_SESSION[currentHands]
+                    ";
+                }
+                if ($flopSecondAction === "fold"){
+                    $_SESSION['flopActionMessage'] = "
+                    <div class='flopAction'>
+                        Villain ($_SESSION[vPosition]): bets $flopFirstBet
+                        <br>
+                        Hero ($_SESSION[hPosition]): folds
+                        <br>
+                        Hero wins
+                    </div>
+                    ";
+                }
+                if ($flopSecondAction === "check"){
+                    $_SESSION['flopActionMessage'] = "You cannot check when someone has bet!";
+                }
+                if ($flopSecondAction === "bet"){
+                    $_SESSION['flopActionMessage'] = "It has to be a raise after someone has bet!";
+                }
+                if ($flopSecondAction === "raise"){
+                    if ($flopThirdAction === "call"){
+                        $_SESSION['flopActionMessage'] = "
+                        <div class='flopAction'>
+                            Villain ($_SESSION[vPosition]): bets $flopFirstBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): raises to $flopSecondBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): calls
+                        </div>
+                        ";
+                        $_SESSION['hero_stack'] -= $flopSecondBet;
+                        $_SESSION['villain_stack'] -= $flopSecondBet;
+                        $_SESSION['preflopMessage'] = "
+                        <div class='stacks'>
+                            <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                            <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                            <span>Blinds: $_SESSION[blinds]</span>
+                        </div>
+                        <br>
+                        $_SESSION[currentHands]
+                        ";
+                    }
+                    if ($flopThirdAction === "fold"){
+                        $_SESSION['flopActionMessage'] = "
+                        <div class='flopAction'>
+                            Villain ($_SESSION[vPosition]): bets $flopFirstBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): raises to $flopSecondBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): folds
+                            <br>
+                            Hero wins
+                        </div>
+                        ";
+                    }
+                    if ($flopThirdAction === "check"){
+                        $_SESSION['flopActionMessage'] = "You cannot check when someone has raised!";
+                    }
+                    if ($flopThirdAction === "bet"){
+                        $_SESSION['flopActionMessage'] = "It has to be a raise after someone has bet!";
+                    }
+                    if ($flopThirdAction === "raise"){
+                        if ($flopFourthAction === "call"){
+                            $_SESSION['flopActionMessage'] = "
+                            <div class='flopAction'>
+                                Villain ($_SESSION[vPosition]): bets $flopFirstBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): raises to $flopSecondBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): raises to $flopThirdBet
+                                <br>
+                                Hero calls $flopThirdBet
+                            </div>
+                            ";
+                            $_SESSION['hero_stack'] -= $flopThirdBet;
+                            $_SESSION['villain_stack'] -= $flopThirdBet;
+                            $_SESSION['preflopMessage'] = "
+                            <div class='stacks'>
+                                <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                                <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                                <span>Blinds: $_SESSION[blinds]</span>
+                            </div>
+                            <br>
+                            $_SESSION[currentHands]
+                            ";
+                        }
+                        if ($flopFourthAction === "fold"){
+                            $_SESSION['flopActionMessage'] = "
+                            <div class='flopAction'>
+                                Villain ($_SESSION[vPosition]): bets $flopFirstBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): raises to $flopSecondBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): raises to $flopThirdBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): folds
+                                <br>
+                                Villain wins
+                            </div>
+                            ";
+                        }
+                        if ($flopFrouthAction === "bet"){
+                            $_SESSION['flopActionMessage'] = "It has to be a raise after someone has bet!";
+                        }
+                        if ($flopFrouthAction === "check"){
+                            $_SESSION['flopActionMessage'] = "You cannot check when someone has raised!";
+                        }
+                        if ($flopFrouthAction === "raise"){
+                            $_SESSION['flopActionMessage'] = "We only support 4 actions at this moment.";
+                        }
+                    }
+                }
+            }
+            if ($flopFirstAction === "check"){
+                if ($flopSecondAction === "check"){
+                    $_SESSION['flopActionMessage'] = "
+                    <div class='flopAction'>
+                        Villain ($_SESSION[vPosition]): checks
+                        <br>
+                        Hero ($_SESSION[hPosition]): checks
+                    </div>
+                    ";
+                }
+                if ($flopSecondAction === "bet"){
+                    if ($flopThirdAction === "fold"){
+                        $_SESSION['flopActionMessage'] = "
+                        <div class='flopAction'>
+                            Villain ($_SESSION[vPosition]): checks
+                            <br>
+                            Hero ($_SESSION[hPosition]): bets $flopSecondBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): folds
+                        </div>
+                    ";
+                    }
+                    if ($flopThirdAction === "check"){
+                        $_SESSION['flopActionMessage'] = "
+                        You cannot check if someone has bet!
+                        ";
+                    }
+                    if ($flopThirdAction === "bet"){
+                        $_SESSION['flopActionMessage'] = "
+                        You cannot bet after someone has bet!
+                        ";
+                    }
+                    if ($flopThirdAction === "call"){
+                        $_SESSION['flopActionMessage'] = "
+                        <div class='flopAction'>
+                            Villain ($_SESSION[vPosition]): checks
+                            <br>
+                            Hero ($_SESSION[hPosition]): bets $flopSecondBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): calls $flopSecondBet
+                        </div>
+                        ";
+                        $_SESSION['hero_stack'] -= $flopSecondBet;
+                        $_SESSION['villain_stack'] -= $flopSecondBet;
+                        $_SESSION['preflopMessage'] = "
+                        <div class='stacks'>
+                            <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                            <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                            <span>Blinds: $_SESSION[blinds]</span>
+                        </div>
+                        <br>
+                        $_SESSION[currentHands]
+                        ";
+                    }
+                    if ($flopThirdAction === "raise"){
+                        if ($flopFourthAction === "call"){
+                            $_SESSION['flopActionMessage'] = "
+                                <div class='flopAction'>
+                                Villain ($_SESSION[vPosition]): checks
+                                <br>
+                                Hero ($_SESSION[hPosition]): bets $flopSecondBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): raises to $flopThirdBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): calls
+                            </div>
+                            ";
+                            $_SESSION['hero_stack'] -= $flopThirdBet;
+                            $_SESSION['villain_stack'] -= $flopThirdBet;
+                            $_SESSION['preflopMessage'] = "
+                            <div class='stacks'>
+                                <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                                <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                                <span>Blinds: $_SESSION[blinds]</span>
+                            </div>
+                            <br>
+                            $_SESSION[currentHands]
+                            ";
+                        }
+                        if ($flopFourthAction === "fold"){
+                            $_SESSION['flopActionMessage'] = "
+                                <div class='flopAction'>
+                                Villain ($_SESSION[vPosition]): checks
+                                <br>
+                                Hero ($_SESSION[hPosition]): bets $flopSecondBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): raises to $flopThirdBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): folds
+                                <br>
+                                Villain wins
+                            </div>
+                            ";
+                        }
+                        if ($flopFourthAction === "raise"){
+                            $_SESSION['flopActionMessage'] = "We only support 4 actions at this moment.";
+                        }
+                    }
+                }
+            }
+
+        }
         $this->showAddHand();
     }
 
     //yet to be implemented
-    public function addTurn(){
+    
+public function addTurn(){
+    $turnFirstAction = $_POST['turnAction'];
+    $turnSecondAction = $_POST['turnAction2'];
+    $turnThirdAction = $_POST['turnAction3'];
+    $turnFourthAction = $_POST['turnAction4'];
+
+    $turnFirstBet = $_POST['betAmountTurn'];
+    $turnSecondBet = $_POST['betAmountTurn2'];
+    $turnThirdBet = $_POST['betAmountTurn3'];
+    $turnFourthBet = $_POST['betAmountTurn4'];
+
+    $turnCard = $_POST['turnCard'];
+    $_SESSION['turnCard'] = $this->cardDict[$turnCard];
+
+    $_SESSION['turnCard'] = "Turn: $_SESSION[turnCard]";
+
+    if ($this->postFlopPositionDict[$_SESSION['hPosition']] < $this->postFlopPositionDict[$_SESSION['vPosition']]){
+        $heroPostFirst = true;
+    }
+    else{
+        $heroPostFirst = false;
+    }
+
+    if ($heroPostFirst === true){
+        if ($turnFirstBet > $_SESSION['hero_stack'] || $turnSecondBet > $_SESSION['villain_stack'] || $turnThirdBet > $_SESSION['hero_stack'] || $turnFourthBet> $_SESSION['villain_stack']){
+            $_SESSION['turnActionMessage'] = "You cannot check bet/raise more than you have!";
+            $this->showAddHand();
+            exit();
+        }
+        if ($turnFirstAction === "bet"){
+            if ($turnSecondAction === "call"){
+                $_SESSION['turnActionMessage'] = "
+                <div class='flopAction'>
+                    Hero ($_SESSION[hPosition]): bets $turnFirstBet
+                    <br>
+                    Villain ($_SESSION[vPosition]): calls
+                </div>
+                ";
+                $_SESSION['hero_stack'] -= $turnFirstBet;
+                $_SESSION['villain_stack'] -= $turnFirstBet;
+                $_SESSION['preflopMessage'] = "
+                <div class='stacks'>
+                    <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                    <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                    <span>Blinds: $_SESSION[blinds]</span>
+                </div>
+                <br>
+                $_SESSION[currentHands]
+                ";
+            }
+            if ($turnSecondAction === "fold"){
+                $_SESSION['turnActionMessage'] = "
+                <div class='flopAction'>
+                    Hero ($_SESSION[hPosition]): bets $turnFirstBet
+                    <br>
+                    Villain ($_SESSION[vPosition]): folds
+                    <br>
+                    Hero wins
+                </div>
+                ";
+            }
+            if ($turnSecondAction === "check"){
+                $_SESSION['turnActionMessage'] = "You cannot check when someone has bet!";
+            }
+            if ($turnSecondAction === "bet"){
+                $_SESSION['turnActionMessage'] = "It has to be a raise after someone has bet!";
+            }
+            if ($turnSecondAction === "raise"){
+                if ($turnThirdAction === "call"){
+                    $_SESSION['turnActionMessage'] = "
+                    <div class='flopAction'>
+                        Hero ($_SESSION[hPosition]): bets $turnFirstBet
+                        <br>
+                        Villain ($_SESSION[vPosition]): raises to $turnSecondBet
+                        <br>
+                        Hero ($_SESSION[hPosition]): calls
+                    </div>
+                    ";
+                    $_SESSION['hero_stack'] -= $turnSecondBet;
+                    $_SESSION['villain_stack'] -= $turnSecondBet;
+                    $_SESSION['preflopMessage'] = "
+                    <div class='stacks'>
+                        <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                        <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                        <span>Blinds: $_SESSION[blinds]</span>
+                    </div>
+                    <br>
+                    $_SESSION[currentHands]
+                    ";
+                }
+                if ($turnThirdAction === "fold"){
+                    $_SESSION['turnActionMessage'] = "
+                    <div class='flopAction'>
+                        Hero ($_SESSION[hPosition]): bets $turnFirstBet
+                        <br>
+                        Villain ($_SESSION[vPosition]): raises to $turnSecondBet
+                        <br>
+                        Hero ($_SESSION[hPosition]): folds
+                        <br>
+                        Villain wins
+                    </div>
+                    ";
+                }
+                if ($turnThirdAction === "check"){
+                    $_SESSION['turnActionMessage'] = "You cannot check when someone has raised!";
+                }
+                if ($turnThirdAction === "bet"){
+                    $_SESSION['turnActionMessage'] = "It has to be a raise after someone has bet!";
+                }
+                if ($turnThirdAction === "raise"){
+                    if ($turnFourthAction === "call"){
+                        $_SESSION['turnActionMessage'] = "
+                        <div class='flopAction'>
+                            Hero ($_SESSION[hPosition]): bets $turnFirstBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): raises to $turnSecondBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): raises to $turnThirdBet
+                            <br>
+                            Villain calls $turnThirdBet
+                        </div>
+                        ";
+                        $_SESSION['hero_stack'] -= $turnThirdBet;
+                        $_SESSION['villain_stack'] -= $turnThirdBet;
+                        $_SESSION['preflopMessage'] = "
+                        <div class='stacks'>
+                            <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                            <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                            <span>Blinds: $_SESSION[blinds]</span>
+                        </div>
+                        <br>
+                        $_SESSION[currentHands]
+                        ";
+                    }
+                    if ($turnFourthAction === "fold"){
+                        $_SESSION['turnActionMessage'] = "
+                        <div class='flopAction'>
+                            Hero ($_SESSION[hPosition]): bets $turnFirstBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): raises to $turnSecondBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): raises to $turnThirdBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): folds
+                            <br>
+                            Hero wins
+                        </div>
+                        ";
+                    }
+                    if ($flopFrouthAction === "bet"){
+                        $_SESSION['turnActionMessage'] = "It has to be a raise after someone has bet!";
+                    }
+                    if ($flopFrouthAction === "check"){
+                        $_SESSION['turnActionMessage'] = "You cannot check when someone has raised!";
+                    }
+                    if ($flopFrouthAction === "raise"){
+                        $_SESSION['turnActionMessage'] = "We only support 4 actions at this moment.";
+                    }
+                }
+            }
+        }
+        if ($turnFirstAction === "check"){
+            if ($turnSecondAction === "check"){
+                $_SESSION['turnActionMessage'] = "
+                <div class='flopAction'>
+                    Hero ($_SESSION[hPosition]): checks
+                    <br>
+                    Villain ($_SESSION[vPosition]): checks
+                </div>
+                ";
+            }
+            if ($turnSecondAction === "bet"){
+                if ($turnThirdAction === "fold"){
+                    $_SESSION['turnActionMessage'] = "
+                    <div class='flopAction'>
+                        Hero ($_SESSION[hPosition]): checks
+                        <br>
+                        Villain ($_SESSION[vPosition]): bets $turnSecondBet
+                        <br>
+                        Hero ($_SESSION[hPosition]): folds
+                    </div>
+                ";
+                }
+                if ($turnThirdAction === "check"){
+                    $_SESSION['turnActionMessage'] = "
+                    You cannot check if someone has bet!
+                    ";
+                }
+                if ($turnThirdAction === "bet"){
+                    $_SESSION['turnActionMessage'] = "
+                    You cannot bet after someone has bet!
+                    ";
+                }
+                if ($turnThirdAction === "call"){
+                    $_SESSION['turnActionMessage'] = "
+                    <div class='flopAction'>
+                        Hero ($_SESSION[hPosition]): checks
+                        <br>
+                        Villain ($_SESSION[vPosition]): bets $turnSecondBet
+                        <br>
+                        Hero ($_SESSION[hPosition]): calls $turnSecondBet
+                    </div>
+                    ";
+                    $_SESSION['hero_stack'] -= $turnSecondBet;
+                    $_SESSION['villain_stack'] -= $turnSecondBet;
+                    $_SESSION['preflopMessage'] = "
+                    <div class='stacks'>
+                        <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                        <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                        <span>Blinds: $_SESSION[blinds]</span>
+                    </div>
+                    <br>
+                    $_SESSION[currentHands]
+                    ";
+                }
+                if ($turnThirdAction === "raise"){
+                    if ($turnFourthAction === "call"){
+                        $_SESSION['turnActionMessage'] = "
+                            <div class='flopAction'>
+                            Hero ($_SESSION[hPosition]): checks
+                            <br>
+                            Villain ($_SESSION[vPosition]): bets $turnSecondBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): raises to $turnThirdBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): calls
+                        </div>
+                        ";
+                        $_SESSION['hero_stack'] -= $turnThirdBet;
+                        $_SESSION['villain_stack'] -= $turnThirdBet;
+                        $_SESSION['preflopMessage'] = "
+                        <div class='stacks'>
+                            <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                            <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                            <span>Blinds: $_SESSION[blinds]</span>
+                        </div>
+                        <br>
+                        $_SESSION[currentHands]
+                        ";
+                    }
+                    if ($turnFourthAction === "fold"){
+                        $_SESSION['turnActionMessage'] = "
+                            <div class='flopAction'>
+                            Hero ($_SESSION[hPosition]): checks
+                            <br>
+                            Villain ($_SESSION[vPosition]): bets $turnSecondBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): raises to $turnThirdBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): folds
+                            <br>
+                            Hero wins
+                        </div>
+                        ";
+                    }
+                    if ($turnFourthAction === "raise"){
+                        $_SESSION['turnActionMessage'] = "We only support 4 actions at this moment.";
+                    }
+                }
+            }
+        }
+    }
+    if ($heroPostFirst === false){
+        if ($turnFirstBet > $_SESSION['hero_stack'] || $turnSecondBet > $_SESSION['villain_stack'] || $turnThirdBet > $_SESSION['hero_stack'] || $turnFourthBet> $_SESSION['villain_stack']){
+            $_SESSION['turnActionMessage'] = "You cannot check bet/raise more than you have!";
+            $this->showAddHand();
+            exit();
+        }
+        if ($turnFirstAction === "bet"){
+            if ($turnSecondAction === "call"){
+                $_SESSION['turnActionMessage'] = "
+                <div class='flopAction'>
+                    Villain ($_SESSION[vPosition]): bets $turnFirstBet
+                    <br>
+                    Hero ($_SESSION[hPosition]): calls
+                </div>
+                ";
+                $_SESSION['hero_stack'] -= $turnFirstBet;
+                $_SESSION['villain_stack'] -= $turnFirstBet;
+                $_SESSION['preflopMessage'] = "
+                <div class='stacks'>
+                    <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                    <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                    <span>Blinds: $_SESSION[blinds]</span>
+                </div>
+                <br>
+                $_SESSION[currentHands]
+                ";
+            }
+            if ($turnSecondAction === "fold"){
+                $_SESSION['turnActionMessage'] = "
+                <div class='flopAction'>
+                    Villain ($_SESSION[vPosition]): bets $turnFirstBet
+                    <br>
+                    Hero ($_SESSION[hPosition]): folds
+                    <br>
+                    Hero wins
+                </div>
+                ";
+            }
+            if ($turnSecondAction === "check"){
+                $_SESSION['turnActionMessage'] = "You cannot check when someone has bet!";
+            }
+            if ($turnSecondAction === "bet"){
+                $_SESSION['turnActionMessage'] = "It has to be a raise after someone has bet!";
+            }
+            if ($turnSecondAction === "raise"){
+                if ($turnThirdAction === "call"){
+                    $_SESSION['turnActionMessage'] = "
+                    <div class='flopAction'>
+                        Villain ($_SESSION[vPosition]): bets $turnFirstBet
+                        <br>
+                        Hero ($_SESSION[hPosition]): raises to $turnSecondBet
+                        <br>
+                        Villain ($_SESSION[vPosition]): calls
+                    </div>
+                    ";
+                    $_SESSION['hero_stack'] -= $turnSecondBet;
+                    $_SESSION['villain_stack'] -= $turnSecondBet;
+                    $_SESSION['preflopMessage'] = "
+                    <div class='stacks'>
+                        <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                        <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                        <span>Blinds: $_SESSION[blinds]</span>
+                    </div>
+                    <br>
+                    $_SESSION[currentHands]
+                    ";
+                }
+                if ($turnThirdAction === "fold"){
+                    $_SESSION['turnActionMessage'] = "
+                    <div class='flopAction'>
+                        Villain ($_SESSION[vPosition]): bets $turnFirstBet
+                        <br>
+                        Hero ($_SESSION[hPosition]): raises to $turnSecondBet
+                        <br>
+                        Villain ($_SESSION[vPosition]): folds
+                        <br>
+                        Hero wins
+                    </div>
+                    ";
+                }
+                if ($turnThirdAction === "check"){
+                    $_SESSION['turnActionMessage'] = "You cannot check when someone has raised!";
+                }
+                if ($turnThirdAction === "bet"){
+                    $_SESSION['turnActionMessage'] = "It has to be a raise after someone has bet!";
+                }
+                if ($turnThirdAction === "raise"){
+                    if ($turnFourthAction === "call"){
+                        $_SESSION['turnActionMessage'] = "
+                        <div class='flopAction'>
+                            Villain ($_SESSION[vPosition]): bets $turnFirstBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): raises to $turnSecondBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): raises to $turnThirdBet
+                            <br>
+                            Hero calls $turnThirdBet
+                        </div>
+                        ";
+                        $_SESSION['hero_stack'] -= $turnThirdBet;
+                        $_SESSION['villain_stack'] -= $turnThirdBet;
+                        $_SESSION['preflopMessage'] = "
+                        <div class='stacks'>
+                            <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                            <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                            <span>Blinds: $_SESSION[blinds]</span>
+                        </div>
+                        <br>
+                        $_SESSION[currentHands]
+                        ";
+                    }
+                    if ($turnFourthAction === "fold"){
+                        $_SESSION['turnActionMessage'] = "
+                        <div class='flopAction'>
+                            Villain ($_SESSION[vPosition]): bets $turnFirstBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): raises to $turnSecondBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): raises to $turnThirdBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): folds
+                            <br>
+                            Villain wins
+                        </div>
+                        ";
+                    }
+                    if ($flopFrouthAction === "bet"){
+                        $_SESSION['turnActionMessage'] = "It has to be a raise after someone has bet!";
+                    }
+                    if ($flopFrouthAction === "check"){
+                        $_SESSION['turnActionMessage'] = "You cannot check when someone has raised!";
+                    }
+                    if ($flopFrouthAction === "raise"){
+                        $_SESSION['turnActionMessage'] = "We only support 4 actions at this moment.";
+                    }
+                }
+            }
+        }
+        if ($turnFirstAction === "check"){
+            if ($turnSecondAction === "check"){
+                $_SESSION['turnActionMessage'] = "
+                <div class='flopAction'>
+                    Villain ($_SESSION[vPosition]): checks
+                    <br>
+                    Hero ($_SESSION[hPosition]): checks
+                </div>
+                ";
+            }
+            if ($turnSecondAction === "bet"){
+                if ($turnThirdAction === "fold"){
+                    $_SESSION['turnActionMessage'] = "
+                    <div class='flopAction'>
+                        Villain ($_SESSION[vPosition]): checks
+                        <br>
+                        Hero ($_SESSION[hPosition]): bets $turnSecondBet
+                        <br>
+                        Villain ($_SESSION[vPosition]): folds
+                    </div>
+                ";
+                }
+                if ($turnThirdAction === "check"){
+                    $_SESSION['turnActionMessage'] = "
+                    You cannot check if someone has bet!
+                    ";
+                }
+                if ($turnThirdAction === "bet"){
+                    $_SESSION['turnActionMessage'] = "
+                    You cannot bet after someone has bet!
+                    ";
+                }
+                if ($turnThirdAction === "call"){
+                    $_SESSION['turnActionMessage'] = "
+                    <div class='flopAction'>
+                        Villain ($_SESSION[vPosition]): checks
+                        <br>
+                        Hero ($_SESSION[hPosition]): bets $turnSecondBet
+                        <br>
+                        Villain ($_SESSION[vPosition]): calls $turnSecondBet
+                    </div>
+                    ";
+                    $_SESSION['hero_stack'] -= $turnSecondBet;
+                    $_SESSION['villain_stack'] -= $turnSecondBet;
+                    $_SESSION['preflopMessage'] = "
+                    <div class='stacks'>
+                        <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                        <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                        <span>Blinds: $_SESSION[blinds]</span>
+                    </div>
+                    <br>
+                    $_SESSION[currentHands]
+                    ";
+                }
+                if ($turnThirdAction === "raise"){
+                    if ($turnFourthAction === "call"){
+                        $_SESSION['turnActionMessage'] = "
+                            <div class='flopAction'>
+                            Villain ($_SESSION[vPosition]): checks
+                            <br>
+                            Hero ($_SESSION[hPosition]): bets $turnSecondBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): raises to $turnThirdBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): calls
+                        </div>
+                        ";
+                        $_SESSION['hero_stack'] -= $turnThirdBet;
+                        $_SESSION['villain_stack'] -= $turnThirdBet;
+                        $_SESSION['preflopMessage'] = "
+                        <div class='stacks'>
+                            <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                            <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                            <span>Blinds: $_SESSION[blinds]</span>
+                        </div>
+                        <br>
+                        $_SESSION[currentHands]
+                        ";
+                    }
+                    if ($turnFourthAction === "fold"){
+                        $_SESSION['turnActionMessage'] = "
+                            <div class='flopAction'>
+                            Villain ($_SESSION[vPosition]): checks
+                            <br>
+                            Hero ($_SESSION[hPosition]): bets $turnSecondBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): raises to $turnThirdBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): folds
+                            <br>
+                            Villain wins
+                        </div>
+                        ";
+                    }
+                    if ($turnFourthAction === "raise"){
+                        $_SESSION['turnActionMessage'] = "We only support 4 actions at this moment.";
+                    }
+                }
+            }
+        }
 
     }
-    public function addRiver(){
+    $this->showAddHand();
+    }
 
+    public function addRiver(){
+        $riverFirstAction = $_POST['riverAction'];
+        $riverSecondAction = $_POST['riverAction2'];
+        $riverThirdAction = $_POST['riverAction3'];
+        $riverFourthAction = $_POST['riverAction4'];
+    
+        $riverFirstBet = $_POST['betAmountRiver'];
+        $riverSecondBet = $_POST['betAmountRiver2'];
+        $riverThirdBet = $_POST['betAmountRiver3'];
+        $riverFourthBet = $_POST['betAmountRiver4'];
+    
+        $riverCard = $_POST['riverCard'];
+        $_SESSION['riverCard'] = $this->cardDict[$riverCard];
+    
+        $_SESSION['riverCard'] = "Turn: $_SESSION[riverCard]";
+    
+        if ($this->postFlopPositionDict[$_SESSION['hPosition']] < $this->postFlopPositionDict[$_SESSION['vPosition']]){
+            $heroPostFirst = true;
+        }
+        else{
+            $heroPostFirst = false;
+        }
+    
+        if ($heroPostFirst === true){
+            if ($riverFirstBet > $_SESSION['hero_stack'] || $riverSecondBet > $_SESSION['villain_stack'] || $riverThirdBet > $_SESSION['hero_stack'] || $riverFourthBet> $_SESSION['villain_stack']){
+                $_SESSION['riverActionMessage'] = "You cannot check bet/raise more than you have!";
+                $this->showAddHand();
+                exit();
+            }
+            if ($riverFirstAction === "bet"){
+                if ($riverSecondAction === "call"){
+                    $_SESSION['riverActionMessage'] = "
+                    <div class='flopAction'>
+                        Hero ($_SESSION[hPosition]): bets $riverFirstBet
+                        <br>
+                        Villain ($_SESSION[vPosition]): calls
+                    </div>
+                    ";
+                    $_SESSION['hero_stack'] -= $riverFirstBet;
+                    $_SESSION['villain_stack'] -= $riverFirstBet;
+                    $_SESSION['preflopMessage'] = "
+                    <div class='stacks'>
+                        <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                        <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                        <span>Blinds: $_SESSION[blinds]</span>
+                    </div>
+                    <br>
+                    $_SESSION[currentHands]
+                    ";
+                }
+                if ($riverSecondAction === "fold"){
+                    $_SESSION['riverActionMessage'] = "
+                    <div class='flopAction'>
+                        Hero ($_SESSION[hPosition]): bets $riverFirstBet
+                        <br>
+                        Villain ($_SESSION[vPosition]): folds
+                        <br>
+                        Hero wins
+                    </div>
+                    ";
+                }
+                if ($riverSecondAction === "check"){
+                    $_SESSION['riverActionMessage'] = "You cannot check when someone has bet!";
+                }
+                if ($riverSecondAction === "bet"){
+                    $_SESSION['riverActionMessage'] = "It has to be a raise after someone has bet!";
+                }
+                if ($riverSecondAction === "raise"){
+                    if ($riverThirdAction === "call"){
+                        $_SESSION['riverActionMessage'] = "
+                        <div class='flopAction'>
+                            Hero ($_SESSION[hPosition]): bets $riverFirstBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): raises to $riverSecondBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): calls
+                        </div>
+                        ";
+                        $_SESSION['hero_stack'] -= $riverSecondBet;
+                        $_SESSION['villain_stack'] -= $riverSecondBet;
+                        $_SESSION['preflopMessage'] = "
+                        <div class='stacks'>
+                            <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                            <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                            <span>Blinds: $_SESSION[blinds]</span>
+                        </div>
+                        <br>
+                        $_SESSION[currentHands]
+                        ";
+                    }
+                    if ($riverThirdAction === "fold"){
+                        $_SESSION['riverActionMessage'] = "
+                        <div class='flopAction'>
+                            Hero ($_SESSION[hPosition]): bets $riverFirstBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): raises to $riverSecondBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): folds
+                            <br>
+                            Villain wins
+                        </div>
+                        ";
+                    }
+                    if ($riverThirdAction === "check"){
+                        $_SESSION['riverActionMessage'] = "You cannot check when someone has raised!";
+                    }
+                    if ($riverThirdAction === "bet"){
+                        $_SESSION['riverActionMessage'] = "It has to be a raise after someone has bet!";
+                    }
+                    if ($riverThirdAction === "raise"){
+                        if ($riverFourthAction === "call"){
+                            $_SESSION['riverActionMessage'] = "
+                            <div class='flopAction'>
+                                Hero ($_SESSION[hPosition]): bets $riverFirstBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): raises to $riverSecondBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): raises to $riverThirdBet
+                                <br>
+                                Villain calls $riverThirdBet
+                            </div>
+                            ";
+                            $_SESSION['hero_stack'] -= $riverThirdBet;
+                            $_SESSION['villain_stack'] -= $riverThirdBet;
+                            $_SESSION['preflopMessage'] = "
+                            <div class='stacks'>
+                                <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                                <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                                <span>Blinds: $_SESSION[blinds]</span>
+                            </div>
+                            <br>
+                            $_SESSION[currentHands]
+                            ";
+                        }
+                        if ($riverFourthAction === "fold"){
+                            $_SESSION['riverActionMessage'] = "
+                            <div class='flopAction'>
+                                Hero ($_SESSION[hPosition]): bets $riverFirstBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): raises to $riverSecondBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): raises to $riverThirdBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): folds
+                                <br>
+                                Hero wins
+                            </div>
+                            ";
+                        }
+                        if ($flopFrouthAction === "bet"){
+                            $_SESSION['riverActionMessage'] = "It has to be a raise after someone has bet!";
+                        }
+                        if ($flopFrouthAction === "check"){
+                            $_SESSION['riverActionMessage'] = "You cannot check when someone has raised!";
+                        }
+                        if ($flopFrouthAction === "raise"){
+                            $_SESSION['riverActionMessage'] = "We only support 4 actions at this moment.";
+                        }
+                    }
+                }
+            }
+            if ($riverFirstAction === "check"){
+                if ($riverSecondAction === "check"){
+                    $_SESSION['riverActionMessage'] = "
+                    <div class='flopAction'>
+                        Hero ($_SESSION[hPosition]): checks
+                        <br>
+                        Villain ($_SESSION[vPosition]): checks
+                    </div>
+                    ";
+                }
+                if ($riverSecondAction === "bet"){
+                    if ($riverThirdAction === "fold"){
+                        $_SESSION['riverActionMessage'] = "
+                        <div class='flopAction'>
+                            Hero ($_SESSION[hPosition]): checks
+                            <br>
+                            Villain ($_SESSION[vPosition]): bets $riverSecondBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): folds
+                        </div>
+                    ";
+                    }
+                    if ($riverThirdAction === "check"){
+                        $_SESSION['riverActionMessage'] = "
+                        You cannot check if someone has bet!
+                        ";
+                    }
+                    if ($riverThirdAction === "bet"){
+                        $_SESSION['riverActionMessage'] = "
+                        You cannot bet after someone has bet!
+                        ";
+                    }
+                    if ($riverThirdAction === "call"){
+                        $_SESSION['riverActionMessage'] = "
+                        <div class='flopAction'>
+                            Hero ($_SESSION[hPosition]): checks
+                            <br>
+                            Villain ($_SESSION[vPosition]): bets $riverSecondBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): calls $riverSecondBet
+                        </div>
+                        ";
+                        $_SESSION['hero_stack'] -= $riverSecondBet;
+                        $_SESSION['villain_stack'] -= $riverSecondBet;
+                        $_SESSION['preflopMessage'] = "
+                        <div class='stacks'>
+                            <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                            <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                            <span>Blinds: $_SESSION[blinds]</span>
+                        </div>
+                        <br>
+                        $_SESSION[currentHands]
+                        ";
+                    }
+                    if ($riverThirdAction === "raise"){
+                        if ($riverFourthAction === "call"){
+                            $_SESSION['riverActionMessage'] = "
+                                <div class='flopAction'>
+                                Hero ($_SESSION[hPosition]): checks
+                                <br>
+                                Villain ($_SESSION[vPosition]): bets $riverSecondBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): raises to $riverThirdBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): calls
+                            </div>
+                            ";
+                            $_SESSION['hero_stack'] -= $riverThirdBet;
+                            $_SESSION['villain_stack'] -= $riverThirdBet;
+                            $_SESSION['preflopMessage'] = "
+                            <div class='stacks'>
+                                <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                                <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                                <span>Blinds: $_SESSION[blinds]</span>
+                            </div>
+                            <br>
+                            $_SESSION[currentHands]
+                            ";
+                        }
+                        if ($riverFourthAction === "fold"){
+                            $_SESSION['riverActionMessage'] = "
+                                <div class='flopAction'>
+                                Hero ($_SESSION[hPosition]): checks
+                                <br>
+                                Villain ($_SESSION[vPosition]): bets $riverSecondBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): raises to $riverThirdBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): folds
+                                <br>
+                                Hero wins
+                            </div>
+                            ";
+                        }
+                        if ($riverFourthAction === "raise"){
+                            $_SESSION['riverActionMessage'] = "We only support 4 actions at this moment.";
+                        }
+                    }
+                }
+            }
+        }
+        if ($heroPostFirst === false){
+            if ($riverFirstBet > $_SESSION['hero_stack'] || $riverSecondBet > $_SESSION['villain_stack'] || $riverThirdBet > $_SESSION['hero_stack'] || $riverFourthBet> $_SESSION['villain_stack']){
+                $_SESSION['riverActionMessage'] = "You cannot check bet/raise more than you have!";
+                $this->showAddHand();
+                exit();
+            }
+            if ($riverFirstAction === "bet"){
+                if ($riverSecondAction === "call"){
+                    $_SESSION['riverActionMessage'] = "
+                    <div class='flopAction'>
+                        Villain ($_SESSION[vPosition]): bets $riverFirstBet
+                        <br>
+                        Hero ($_SESSION[hPosition]): calls
+                    </div>
+                    ";
+                    $_SESSION['hero_stack'] -= $riverFirstBet;
+                    $_SESSION['villain_stack'] -= $riverFirstBet;
+                    $_SESSION['preflopMessage'] = "
+                    <div class='stacks'>
+                        <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                        <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                        <span>Blinds: $_SESSION[blinds]</span>
+                    </div>
+                    <br>
+                    $_SESSION[currentHands]
+                    ";
+                }
+                if ($riverSecondAction === "fold"){
+                    $_SESSION['riverActionMessage'] = "
+                    <div class='flopAction'>
+                        Villain ($_SESSION[vPosition]): bets $riverFirstBet
+                        <br>
+                        Hero ($_SESSION[hPosition]): folds
+                        <br>
+                        Hero wins
+                    </div>
+                    ";
+                }
+                if ($riverSecondAction === "check"){
+                    $_SESSION['riverActionMessage'] = "You cannot check when someone has bet!";
+                }
+                if ($riverSecondAction === "bet"){
+                    $_SESSION['riverActionMessage'] = "It has to be a raise after someone has bet!";
+                }
+                if ($riverSecondAction === "raise"){
+                    if ($riverThirdAction === "call"){
+                        $_SESSION['riverActionMessage'] = "
+                        <div class='flopAction'>
+                            Villain ($_SESSION[vPosition]): bets $riverFirstBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): raises to $riverSecondBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): calls
+                        </div>
+                        ";
+                        $_SESSION['hero_stack'] -= $riverSecondBet;
+                        $_SESSION['villain_stack'] -= $riverSecondBet;
+                        $_SESSION['preflopMessage'] = "
+                        <div class='stacks'>
+                            <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                            <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                            <span>Blinds: $_SESSION[blinds]</span>
+                        </div>
+                        <br>
+                        $_SESSION[currentHands]
+                        ";
+                    }
+                    if ($riverThirdAction === "fold"){
+                        $_SESSION['riverActionMessage'] = "
+                        <div class='flopAction'>
+                            Villain ($_SESSION[vPosition]): bets $riverFirstBet
+                            <br>
+                            Hero ($_SESSION[hPosition]): raises to $riverSecondBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): folds
+                            <br>
+                            Hero wins
+                        </div>
+                        ";
+                    }
+                    if ($riverThirdAction === "check"){
+                        $_SESSION['riverActionMessage'] = "You cannot check when someone has raised!";
+                    }
+                    if ($riverThirdAction === "bet"){
+                        $_SESSION['riverActionMessage'] = "It has to be a raise after someone has bet!";
+                    }
+                    if ($riverThirdAction === "raise"){
+                        if ($riverFourthAction === "call"){
+                            $_SESSION['riverActionMessage'] = "
+                            <div class='flopAction'>
+                                Villain ($_SESSION[vPosition]): bets $riverFirstBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): raises to $riverSecondBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): raises to $riverThirdBet
+                                <br>
+                                Hero calls $riverThirdBet
+                            </div>
+                            ";
+                            $_SESSION['hero_stack'] -= $riverThirdBet;
+                            $_SESSION['villain_stack'] -= $riverThirdBet;
+                            $_SESSION['preflopMessage'] = "
+                            <div class='stacks'>
+                                <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                                <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                                <span>Blinds: $_SESSION[blinds]</span>
+                            </div>
+                            <br>
+                            $_SESSION[currentHands]
+                            ";
+                        }
+                        if ($riverFourthAction === "fold"){
+                            $_SESSION['riverActionMessage'] = "
+                            <div class='flopAction'>
+                                Villain ($_SESSION[vPosition]): bets $riverFirstBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): raises to $riverSecondBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): raises to $riverThirdBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): folds
+                                <br>
+                                Villain wins
+                            </div>
+                            ";
+                        }
+                        if ($flopFrouthAction === "bet"){
+                            $_SESSION['riverActionMessage'] = "It has to be a raise after someone has bet!";
+                        }
+                        if ($flopFrouthAction === "check"){
+                            $_SESSION['riverActionMessage'] = "You cannot check when someone has raised!";
+                        }
+                        if ($flopFrouthAction === "raise"){
+                            $_SESSION['riverActionMessage'] = "We only support 4 actions at this moment.";
+                        }
+                    }
+                }
+            }
+            if ($riverFirstAction === "check"){
+                if ($riverSecondAction === "check"){
+                    $_SESSION['riverActionMessage'] = "
+                    <div class='flopAction'>
+                        Villain ($_SESSION[vPosition]): checks
+                        <br>
+                        Hero ($_SESSION[hPosition]): checks
+                    </div>
+                    ";
+                }
+                if ($riverSecondAction === "bet"){
+                    if ($riverThirdAction === "fold"){
+                        $_SESSION['riverActionMessage'] = "
+                        <div class='flopAction'>
+                            Villain ($_SESSION[vPosition]): checks
+                            <br>
+                            Hero ($_SESSION[hPosition]): bets $riverSecondBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): folds
+                        </div>
+                    ";
+                    }
+                    if ($riverThirdAction === "check"){
+                        $_SESSION['riverActionMessage'] = "
+                        You cannot check if someone has bet!
+                        ";
+                    }
+                    if ($riverThirdAction === "bet"){
+                        $_SESSION['riverActionMessage'] = "
+                        You cannot bet after someone has bet!
+                        ";
+                    }
+                    if ($riverThirdAction === "call"){
+                        $_SESSION['riverActionMessage'] = "
+                        <div class='flopAction'>
+                            Villain ($_SESSION[vPosition]): checks
+                            <br>
+                            Hero ($_SESSION[hPosition]): bets $riverSecondBet
+                            <br>
+                            Villain ($_SESSION[vPosition]): calls $riverSecondBet
+                        </div>
+                        ";
+                        $_SESSION['hero_stack'] -= $riverSecondBet;
+                        $_SESSION['villain_stack'] -= $riverSecondBet;
+                        $_SESSION['preflopMessage'] = "
+                        <div class='stacks'>
+                            <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                            <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                            <span>Blinds: $_SESSION[blinds]</span>
+                        </div>
+                        <br>
+                        $_SESSION[currentHands]
+                        ";
+                    }
+                    if ($riverThirdAction === "raise"){
+                        if ($riverFourthAction === "call"){
+                            $_SESSION['riverActionMessage'] = "
+                                <div class='flopAction'>
+                                Villain ($_SESSION[vPosition]): checks
+                                <br>
+                                Hero ($_SESSION[hPosition]): bets $riverSecondBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): raises to $riverThirdBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): calls
+                            </div>
+                            ";
+                            $_SESSION['hero_stack'] -= $riverThirdBet;
+                            $_SESSION['villain_stack'] -= $riverThirdBet;
+                            $_SESSION['preflopMessage'] = "
+                            <div class='stacks'>
+                                <span>Hero Stack: $_SESSION[hero_stack] ($_SESSION[hero_stack_bb] bb) </span> <br> 
+                                <span>Villain Stack: $_SESSION[villain_stack] ($_SESSION[villain_stack_bb] bb) </span> <br> 
+                                <span>Blinds: $_SESSION[blinds]</span>
+                            </div>
+                            <br>
+                            $_SESSION[currentHands]
+                            ";
+                        }
+                        if ($riverFourthAction === "fold"){
+                            $_SESSION['riverActionMessage'] = "
+                                <div class='flopAction'>
+                                Villain ($_SESSION[vPosition]): checks
+                                <br>
+                                Hero ($_SESSION[hPosition]): bets $riverSecondBet
+                                <br>
+                                Villain ($_SESSION[vPosition]): raises to $riverThirdBet
+                                <br>
+                                Hero ($_SESSION[hPosition]): folds
+                                <br>
+                                Villain wins
+                            </div>
+                            ";
+                        }
+                        if ($riverFourthAction === "raise"){
+                            $_SESSION['riverActionMessage'] = "We only support 4 actions at this moment.";
+                        }
+                    }
+                }
+            }
+    
+        }
+        $this->showAddHand();
     }
 
     public function submitDB(){
         // $preflopActionMessageJSON = $_SESSION['preflopActionMessage'];
-        $parts= explode("\n", $_SESSION['preflopActionMessage']);
+        $parts1= explode("\n", $_SESSION['preflopMessage']);
+        $parts2= explode("\n", $_SESSION['preflopActionMessage']);
+        $parts3= explode("\n", $_SESSION['flopcards']);
+        $parts4= explode("\n", $_SESSION['flopActionMessage']);
+        $parts5= explode("\n", $_SESSION['turnCard']);
+        $parts6= explode("\n", $_SESSION['turnActionMessage']);
+        $parts7= explode("\n", $_SESSION['riverCard']);
+        $parts8= explode("\n", $_SESSION['riverActionMessage']);
 
-        $outputArray = array();
+        $parts = array_merge($parts1, $parts2);
+        $parts = array_merge($parts, $parts3);
+        $parts = array_merge($parts, $parts4);
+        $parts = array_merge($parts, $parts5);
+        $parts = array_merge($parts, $parts6);
+        $parts = array_merge($parts, $parts7);
+        $parts = array_merge($parts, $parts8);
 
         $data = array();
 
@@ -1175,6 +2690,7 @@ class pokerController {
 
         $jsonPreflopAction = json_encode($data);
         $_SESSION['myJSON'] = $jsonPreflopAction;
+
         // print_r($parts);
         // print_r($_SESSION['preflopActionMessage']);
         // print_r($jsonPreflopAction);
@@ -1206,7 +2722,12 @@ class pokerController {
         $selectHandArray= $this->db->query("SELECT * FROM hands WHERE email = $1;",
         $targetName);
 
-        $_SESSION['forSelectHand'] = $selectHandArray;
+        if ($selectHandArray){
+            $_SESSION['forSelectHand'] = $selectHandArray;
+        }
+        else{
+            unset($_SESSION['forSelectHand']);
+        }
     }
 
     public function getEmail($name) {
@@ -1218,41 +2739,50 @@ class pokerController {
     }
 
     public function searchFriend() {
-        if(isset($_POST['searchFriend']) && !empty($_POST['searchFriend'])) {
-            if($_POST['searchFriend'] == $_SESSION['name']) {
-                $this->errorMessage = "You cannot add yourself as a friend";
+        if (isset($_POST['searchFriend']) && !empty($_POST['searchFriend'])) {
+            $friendName = trim($_POST['searchFriend']);
+    
+            // Check if trying to add oneself
+            if ($friendName == $_SESSION['name']) {
+                $_SESSION['error_message'] = "You cannot add yourself as a friend.";
+                header("Location: ?command=online");
                 return;
             }
-
-            $res = $this->db->query("select * from users where name = $1;", $_POST["searchFriend"]);
-
+    
+            // Check if the player is already friends with the searched player
+            $existingFriend = $this->db->query("SELECT * FROM friends WHERE name = $1 AND friendName = $2;", $_SESSION['name'], $friendName);
+            if (!empty($existingFriend)) {
+                $_SESSION['error_message'] = "You are already friends with $friendName.";
+                header("Location: ?command=online");
+                return;
+            }
+    
+            // Check if the player exists
+            $res = $this->db->query("SELECT * FROM users WHERE name = $1;", $friendName);
+    
             if (!empty($res)) {
-
                 // TODO: DONT ADD DUPLICATE FRIENDS
-                $friendName = trim($_POST['searchFriend']); 
-                if($friendName !== "") {
-                    $this->getEmail($_POST['searchFriend']);
-                    $this->db->query("INSERT INTO FRIENDS (name, email, friendName, friendEmail) values ($1, $2, $3, $4);",
-                    $_SESSION["name"], $_SESSION["email"],
-                    $friendName, $_SESSION['friendEmail']
+                if ($friendName !== "") {
+                    $this->getEmail($friendName);
+                    $this->db->query(
+                        "INSERT INTO friends (name, email, friendName, friendEmail) VALUES ($1, $2, $3, $4);",
+                        $_SESSION["name"], $_SESSION["email"],
+                        $friendName, $_SESSION['friendEmail']
                     );
                     header("Location: ?command=online");
-                }
-
-                else {
-                    //TODO : ADD THIS FUNCTIONALITY
-                    $this->errorMessage = "Enter nonwhite spaces";
+                } else {
+                    // TODO: ADD THIS FUNCTIONALITY
+                    $_SESSION['error_message'] = "Enter nonwhite spaces.";
                     header("Location: ?command=online");
                 }
-            } 
-            else {
+            } else {
                 // TODO: ADD THIS FUNCTIONALITY
-                $this->errorMessage = "Player doesn't exist.";
+                $_SESSION['error_message'] = "Player doesn't exist.";
                 header("Location: ?command=online");
             }
         }
-
     }
+    
 
     public function getNews() {
         $mihirsKey="ccab0c64b2a04a2fb240828366a80f69";
@@ -1307,6 +2837,10 @@ class pokerController {
         return $drawnCards;
     }
 
+    public function drawBackCards() {
+        $cardDict = array_keys($this->backCards);
+    }
+
     public function drawAndAddToCards($numCards, $person) {
         // Call the drawCards function to get drawn cards
         $drawnCards = $this->drawCards($numCards);
@@ -1327,10 +2861,12 @@ class pokerController {
         $_SESSION['botCards'] = array();
         $_SESSION['communityCards'] = array();
         $_SESSION['backCards'] = array();
+        $_SESSION['count'] = 0;
 
     }
 
     public function setUpPoker() {
+        $this->deleteAllHands();
         $this->deleteAllHands();
         $this->drawAndAddToCards(2, 'myCards');
         $this->drawAndAddToCards(2, 'botCards');
@@ -1352,6 +2888,10 @@ class pokerController {
             }
         
         echo json_encode(['success' => false, 'message' => 'Invalid request']); 
+    }
+
+    public function calculator() {
+        include("/opt/src/Project/calculator.php");
     }
     
 

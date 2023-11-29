@@ -77,15 +77,6 @@
 </style>
 
 
-
-
-        <!-- <?php 
-        echo $_SESSION['name'];
-        echo $_SESSION['email'];
-        print_r($_SESSION['checkDB']);
-        ?> -->
-
-
     <title>Bootstrap Starter HTML</title>  
 </head>
 <body>
@@ -95,9 +86,9 @@
             <img src="../projectAssets/pokerchip.jpg" alt="chip">
             <div class="text-container">Home</div>
         </a>
-        <a href="?command=alone" class="nav-item">
+        <a href="?command=calculator" class="nav-item">
             <img src="../projectAssets/pokerchip.jpg" alt="chip">
-            <div class="text-container">Play Alone</div>
+            <div class="text-container">Calculator</div>
         </a>
         <a href="?command=handhistories" class="nav-item">
             <img src="../projectAssets/pokerchip.jpg" alt="chip">
@@ -121,7 +112,7 @@
         <form id="messageForm">
             <input type="text" class="message-input" id="messageInput" placeholder="Type your message...">
             <button type="button" class="send-button" onclick="sendMessage()">Send</button>
-            <button type="button" class="send-button" onclick="fetchConvos()">CHECK CONVOS</button>
+            <!-- <button type="button" class="send-button" onclick="fetchConvos()">CHECK CONVOS</button> -->
         </form>
     </div>
     <?php
@@ -247,9 +238,9 @@ function updateConversation(messages) {
     }
 
 // code to run this every x milliseconds
-// setInterval(function () {
-//         fetchConvos();
-//     }, 3000);
+setInterval(function () {
+        fetchConvos();
+    }, 1000);
 
 
 

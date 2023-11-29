@@ -10,6 +10,7 @@
     
     <title>Bootstrap Starter HTML</title>  
 </head>
+
 <body>
 
     <div class="navbar">
@@ -17,9 +18,9 @@
             <img src="../projectAssets/pokerchip.jpg" alt="chip">
             <div class="text-container">Home</div>
         </a>
-        <a href="?command=alone" class="nav-item">
+        <a href="?command=calculator" class="nav-item">
             <img src="../projectAssets/pokerchip.jpg" alt="chip">
-            <div class="text-container">Play Alone</div>
+            <div class="text-container">Calculator</div>
         </a>
         <a href="?command=handhistories" class="nav-item">
             <img src="../projectAssets/pokerchip.jpg" alt="chip">
@@ -31,19 +32,23 @@
         </a> 
     </div>
 <!-- Game Choosers -->
-    <h1 class="page-title">Game Info</h1>
     <div class="online-container">
             <!-- Friends List -->
             <div>
                 <h3 style="text-align: center; color: white;"> Friends </h3>
                 <div class="friends-list">
-                    <form method="post" action="?command=searchFriend">
+                    <form method="post" action="?command=searchFriend" class="friend-form">
                         <label for="searchFriend">Add Friend:</label>
                         <input type="text" name="searchFriend" id="searchFriend" required>
-                        <br>
-                        <input type="submit" value="SearchFriend">
+                        <input type="submit" value="Search Friend">
+                            <!-- Display error message here -->
+                        <?php
+                        if (isset($_SESSION['error_message'])) {
+                            echo '<div class="error-message">' . $_SESSION['error_message'] . '</div>';
+                            unset($_SESSION['error_message']); // Clear the error message after displaying it
+                        }
+                        ?>
                     </form>
-
                     <?php
                         // Check if friends data is set in the session
                         if (isset($_SESSION['friends'])) {

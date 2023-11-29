@@ -24,15 +24,15 @@
         <nav class="main-nav">
             <ul class="firstSection">
                 <li>
-                    <a href="?command=alone">
+                    <a href="?command=calculator">
                         <img src="/projectAssets/pokerchip.jpg" alt="chip">
-                        <div class="text-container">Play Alone</div>
+                        <div class="text-container">Calculator</div>
                     </a>
                 </li>
                 <li>
                     <a href="?command=online">
                         <img src="/projectAssets/pokerchip.jpg" alt="chip">
-                        <div class="text-container">Play Online</div>
+                        <div class="text-container">Chat With Friends</div>
                     </a>
                 </li>
             </ul>

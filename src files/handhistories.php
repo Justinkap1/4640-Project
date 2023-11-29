@@ -14,27 +14,27 @@
 <body>
     <header>
         <div class="header-top" id="main-header">
-            <div class="poker-header"><img src="../projectAssets/poker-logo.jpg" alt="poker logo"></div>
+            <div class="poker-header"><img src="../assets/poker-logo.jpg" alt="poker logo"></div>
             <h1>Hand Histories for <?=$name?></h1>
-            <div class="pfp"><img src="/projectAssets/pfp.jpg" alt="profile pic"></div>
+            <div class="pfp"><img src="/assets/pfp.jpg" alt="profile pic"></div>
         </div>
         <div class="choose-quote">Choose to view or select</div>
     </header>
     <section class="choose-section">
         <a href="?command=addhand">
-            <img src="/projectAssets/pokerchip.jpg" alt="chip">
+            <img src="../assets/pokerchip.jpg" alt="chip">
             <div class="add-a-hand">Add a Hand</div>
         </a>
         <a href="?command=selecthand">
-            <img src="/projectAssets/pokerchip.jpg" alt="chip">
+            <img src="../assets/pokerchip.jpg" alt="chip">
             <div class="select-a-hand">Select a Hand</div>
         </a>
     </section>
     <footer class="main-footer" id="main-foot">
         <ul class="links">
-            <li><img src="/projectAssets/twitter.png" alt="twitter"></li>
-            <li><img src="/projectAssets/discord.png" alt="discord"></li>
-            <li><img src="/projectAssets/instagram.png" alt="instagram"></li>
+            <li><img src="/assets/twitter.png" alt="twitter"></li>
+            <li><img src="/assets/discord.png" alt="discord"></li>
+            <li><img src="/assets/instagram.png" alt="instagram"></li>
         </ul>
         <small>Copyright Justin Kaplan and Mihir Sangameswar 2023</small>
         <form class="d-flex" role="search" id="searchBar">

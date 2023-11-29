@@ -97,13 +97,16 @@
         width: 60%;
         height: 500px;
         margin: auto;
-        background-image: url('projectAssets/table-display.jpg');
+        background-image: url('../projectAssets/table-display.jpg');
         background-repeat: no-repeat;
         background-size: 100% 100%;
         position: relative;
     }
     .preflopAction{
         font-weight: bold; 
+    }
+    .flopAction{
+        font-weight: bold;
     }
     .table-text-container{
         display: flex;
@@ -112,12 +115,30 @@
         position: fixed;
         bottom: 5px;
     }
+    .date-section form {
+        display: flex;
+        width: 15%; /* Adjust the width as needed */
+        margin: auto;
+        font-weight: bold;
+        font-size: 1rem;
+        flex-direction: column; /* Stack elements vertically */
+    }
+    .date-section form input{
+        width: 100%;
+    }
 </style>
 <body>
     <h1 class="add-hand">Add a Hand</h1>
     <button class='logout'>
         <a href="?command=logout">Log out</a>
     </button>
+    <div class="date-section">
+        <form action="?command=addDateTime">
+            <label for="handTitle">Give this hand a title</label>
+            <input type="text" id="handTitle" name="handTitle">
+            <button type="Submit">Submit Title</button>
+        </form>
+    </div>
     <div class="container">
         <section class="gameStart-info">
             <h1>Game Info</h1>
@@ -217,7 +238,6 @@
                 <input type="text" name="betAmount4">
                 </div>
                 <input type="submit" value="Update">
-                <input type="hidden" value="<?php echo $_SESSION['blinds']; ?>" name="blindss">
                 </form>
             </section>
             <!-- FLOP ACTION -->
@@ -402,6 +422,12 @@
     <div class='table-text-container'>
     <section class='console'>
         <?=$preflopActionMessage?>
+        <?=$_SESSION['flopcards']?>
+        <?=$_SESSION['flopActionMessage']?>
+        <?=$_SESSION['turnCard']?>
+        <?=$_SESSION['turnActionMessage']?>
+        <?=$_SESSION['riverCard']?>
+        <?=$_SESSION['riverActionMessage']?>
     </section>
     <section class="table-image">
     </section>
