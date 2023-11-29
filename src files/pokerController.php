@@ -57,6 +57,10 @@ class pokerController {
         "2c" => "<img src='../projectAssets/2_of_clubs.png' alt='2 of Clubs' width='55' height='70'>"
     );
 
+    private $backCards = array(
+        "BackCard1" => "<img src='../projectAssets/backCard.png' alt='Back of Car' width='55' height='70'>",
+        "BackCard1" => "<img src='../projectAssets/backCard.png' alt='Back of Car' width='55' height='70'>"
+    );
     private $positionDict = array(
         "utg" => 0,
         "utg1" => 1,
@@ -175,6 +179,12 @@ class pokerController {
             case "fetchConvos":
                 $this->fetchConvos();
                 break;
+            case "startGame":
+                $this->setUpPoker();
+                break;
+            case "updateCount":
+                $this->updateCount();
+                break;
             default:
                 $this->showWelcome();
                 break;
@@ -292,6 +302,8 @@ class pokerController {
 
         $_SESSION['friends']= $this->db->query("SELECT * FROM friends WHERE email = $1;",
         $_SESSION['email']);
+
+        print_r($_SESSION['friends']);
 
         include("/opt/src/Project/online.php");
     }
@@ -1217,15 +1229,21 @@ class pokerController {
             if (!empty($res)) {
 
                 // TODO: DONT ADD DUPLICATE FRIENDS
-                $this->getEmail($_POST['searchFriend']);
-                $this->db->query("INSERT INTO FRIENDS (name, email, friendName, friendEmail) values ($1, $2, $3, $4);",
-                $_SESSION["name"], $_SESSION["email"],
-                $_POST['searchFriend'], $_SESSION['friendEmail']
-                );
+                $friendName = trim($_POST['searchFriend']); 
+                if($friendName !== "") {
+                    $this->getEmail($_POST['searchFriend']);
+                    $this->db->query("INSERT INTO FRIENDS (name, email, friendName, friendEmail) values ($1, $2, $3, $4);",
+                    $_SESSION["name"], $_SESSION["email"],
+                    $friendName, $_SESSION['friendEmail']
+                    );
+                    header("Location: ?command=online");
+                }
 
-
-
-                header("Location: ?command=online");
+                else {
+                    //TODO : ADD THIS FUNCTIONALITY
+                    $this->errorMessage = "Enter nonwhite spaces";
+                    header("Location: ?command=online");
+                }
             } 
             else {
                 // TODO: ADD THIS FUNCTIONALITY
@@ -1256,7 +1274,7 @@ class pokerController {
 
     public function fetchConvos() {
 
-        $res = $this->db->query("SELECT * FROM msgs WHERE sendName = $1 AND sendEmail = $2;",  $_SESSION["name"], $_SESSION["email"]);
+        $res = $this->db->query("SELECT * FROM msgs WHERE sendName = $1 AND sendEmail = $2 OR recieveName = $1 AND recieveEmail = $2;", $_SESSION["name"], $_SESSION["email"]);
         if (!isset($res)) {
             die("No questions in the database");
         }
@@ -1267,6 +1285,76 @@ class pokerController {
         echo json_encode($question);
         
     }
+
+    public function drawCards($numCards) {
+        $cardDict = array_keys($this->cardDict);
+        if (!isset($_SESSION['remainingCards'])) {
+            $_SESSION['remainingCards'] = $cardDict;
+        }
+    
+        $keys = array_keys($_SESSION['remainingCards']);
+        shuffle($keys);
+    
+        $drawnCards = array();
+        for ($i = 0; $i < $numCards; $i++) {
+            if (!empty($_SESSION['remainingCards'])) {
+                $drawnCards[$keys[$i]] = $_SESSION['remainingCards'][$keys[$i]];
+                unset($_SESSION['remainingCards'][$keys[$i]]);
+            } else {
+                break;
+            }
+        }
+        return $drawnCards;
+    }
+
+    public function drawAndAddToCards($numCards, $person) {
+        // Call the drawCards function to get drawn cards
+        $drawnCards = $this->drawCards($numCards);
+    
+        // Initialize $_SESSION['myCards'] if it doesn't exist
+        if (!isset($_SESSION[$person])) {
+            $_SESSION[$person] = array();
+        }
+    
+        // Add the drawn cards to $_SESSION['myCards']
+        $_SESSION[$person] = array_merge($_SESSION[$person], $drawnCards);
+
+        return $drawnCards;
+    }
+    
+    public function deleteAllHands() {
+        $_SESSION['myCards'] = array();
+        $_SESSION['botCards'] = array();
+        $_SESSION['communityCards'] = array();
+        $_SESSION['backCards'] = array();
+
+    }
+
+    public function setUpPoker() {
+        $this->deleteAllHands();
+        $this->drawAndAddToCards(2, 'myCards');
+        $this->drawAndAddToCards(2, 'botCards');
+        $this->drawAndAddToCards(5, 'communityCards');
+        include("/opt/src/Project/pokerSetUp.php");
+    }
+
+    public function updateCount() {
+
+            $data = json_decode(file_get_contents('php://input'), true);
+
+            // echo "HELLO WORLD MIHIR WAS HERE";
+            // echo $data;
+        
+            if (isset($data['count'])) {
+                $_SESSION['count'] = $data['count'];
+                echo json_encode(['success' => true]);
+                exit;
+            }
+        
+        echo json_encode(['success' => false, 'message' => 'Invalid request']); 
+    }
+    
+
 
     public function logout(){
         session_destroy();
