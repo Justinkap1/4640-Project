@@ -45,13 +45,24 @@
 </head>
 
 <body onload="searchNewsDefault()">
-    <header>
-        <div class="header-top" id="main-header">
-            <div class="poker-header"><img src="../projectAssets/poker-logo.jpg" alt="poker logo"></div>
-            <h1>Welcome to UVA ARTICLES, <?=$name?>!</h1>
-            <div class="pfp"><img src="/projectAssets/pfp.jpg" alt="profile pic"></div>
-        </div>
-    </header>
+    <div class="navbar">
+        <a href="?command=homePage" class="nav-item">
+            <img src="../projectAssets/pokerchip.jpg" alt="chip">
+            <div class="text-container">Home</div>
+        </a>
+        <a href="?command=calculator" class="nav-item">
+            <img src="../projectAssets/pokerchip.jpg" alt="chip">
+            <div class="text-container">Calculator</div>
+        </a>
+        <a href="?command=online" class="nav-item">
+            <img src="../projectAssets/pokerchip.jpg" alt="chip">
+            <div class="text-container">Chat</div>
+        </a> 
+        <a href="?command=handhistories" class="nav-item">
+            <img src="../projectAssets/pokerchip.jpg" alt="chip">
+            <div class="text-container">Hand History</div>
+        </a>
+    </div>
 
     <!-- News Search Results -->
     <main>
